@@ -99,6 +99,10 @@ private slots:
 
     void on_autor_linkActivated(const QString &link);
 
+    void on_refreashbtn_clicked();
+
+    void on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item, int column);
+
 private:
     Ui::Widget *ui;
 

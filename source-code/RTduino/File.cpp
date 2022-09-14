@@ -217,6 +217,10 @@ void Widget::write_data_to_hfile()
     {
         if(i->io_name.mid(0,3) == "spi")
         {
+            if(!(ui->spissbox->currentText() == "NULL"))
+            {
+                out << "#define SS      "+ui->spissbox->currentText()+"\n";
+            }
             out << "#define RTDUINO_DEFAULT_SPI_BUS_NAME      \""+i->io_name+"\"\n\n";
             break;
         }
@@ -355,4 +359,3 @@ void Widget::write_data_to_scons()
 
     out << FILESCONS_CODE;
 }
-

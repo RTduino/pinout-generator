@@ -1,6 +1,7 @@
 #include "widget.h"
 #include "ui_widget.h"
 #include <QDesktopServices>
+#include <QModelIndex>
 
 Widget::Widget(QWidget *parent)
     : QWidget(parent)
@@ -12,6 +13,7 @@ Widget::Widget(QWidget *parent)
     ui->autor->setText(tr("<a href = 'https://github.com/liYony'>https://github.com/liYony</a>"));
     ui->project->setText(tr("<a href = 'https://github.com/RTduino/pinout-generator'>https://github.com/RTduino/pinout-generator</a>"));
     addui = new add;
+    addui->setWindowModality(Qt::ApplicationModal);//设置界面不可点击
     connect(addui,SIGNAL(send_add_data(QStringList &)),this,SLOT(recive_add_data(QStringList &)));
 }
 
@@ -90,6 +92,8 @@ void Widget::add_item_table()
 
 void Widget::serials_cbox_data()
 {
+    QString curs2(ui->s2box->currentText());
+    QString curs3(ui->s3box->currentText());
     QStringList uartlist("NULL");
     ui->s2box->clear();
     ui->s3box->clear();
@@ -103,12 +107,17 @@ void Widget::serials_cbox_data()
     }
     ui->s2box->addItems(uartlist);
     ui->s3box->addItems(uartlist);
+    ui->s2box->setCurrentText(curs2);
+    ui->s3box->setCurrentText(curs3);
 }
 
 void Widget::ledpin_cbox_data()
 {
+    QString led(ui->ledbox->currentText());
+    QString spi(ui->spissbox->currentText());
     QStringList ledlist("NULL");
     ui->ledbox->clear();
+    ui->spissbox->clear();
     foreach(auto i,pinmaplist)
     {
         if(i->io_function != "ADC")
@@ -118,6 +127,9 @@ void Widget::ledpin_cbox_data()
         }
     }
     ui->ledbox->addItems(ledlist);
+    ui->spissbox->addItems(ledlist);
+    ui->ledbox->setCurrentText(led);
+    ui->spissbox->setCurrentText(spi);
 }
 
 void Widget::update_table_data()
@@ -217,12 +229,14 @@ void Widget::on_exportbtn_clicked()
     {
         setting.setValue("LastFilePath",rttBspdirpath);  //记录路径到QSetting中保存
     }
+
+    update_table_data();
     load_data_to_dir();
 }
 
 void Widget::recive_add_data(QStringList &strlist)
 {
-    qDebug() << changeardpin;
+    int highlight = 0;
     if(!changeardpin.isEmpty())
     {
         foreach(auto i,pinmaplist)
@@ -233,6 +247,7 @@ void Widget::recive_add_data(QStringList &strlist)
                 i->io_function = strlist.at(0);
                 i->io_name = strlist.at(2);
                 i->rtthread_pin = strlist.at(1);
+                highlight = pinmaplist.indexOf(i);
             }
         }
         update_pinmaps();
@@ -249,6 +264,7 @@ void Widget::recive_add_data(QStringList &strlist)
                 pmap->io_name = strlist.at(2);
                 pmap->rtthread_pin = strlist.at(1);
                 pinmaplist.insert(pinmaplist.indexOf(i)+1, pmap);
+                highlight = pinmaplist.indexOf(i)+1;
             }
         }
         update_pinmaps();
@@ -262,12 +278,12 @@ void Widget::recive_add_data(QStringList &strlist)
         pmap->rtthread_pin = strlist.at(1);
         pinmaplist.push_back(pmap);
         update_pinmaps();
-
-        ui->treeWidget->scrollToBottom();
+        highlight = pinmaplist.indexOf(pmap);
     }
 
-    update_table_data();
-
+    QModelIndex modelindex = ui->treeWidget->model()->index(highlight, 0);
+    ui->treeWidget->setCurrentIndex(modelindex);
+//    update_table_data();
 }
 
 void Widget::on_addbtn_clicked()
@@ -290,5 +306,19 @@ void Widget::on_project_linkActivated(const QString &link)
 void Widget::on_autor_linkActivated(const QString &link)
 {
     QDesktopServices::openUrl(QUrl(link,QUrl::TolerantMode));
+}
+
+
+void Widget::on_refreashbtn_clicked()
+{
+    update_table_data();
+}
+
+
+void Widget::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item, int column)
+{
+    QStringList pininfo;
+    pininfo << item->text(0) << item->text(1) << item->text(2) << item->text(3) << item->text(4) << "chg";
+    change_item_table(pininfo);
 }
 
