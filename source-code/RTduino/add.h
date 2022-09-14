@@ -21,12 +21,20 @@ public:
 
     void set_widget_info(QStringList &list);
 
+    void set_insert_info();
+
 private slots:
     void on_addbtn_clicked();
 
     void on_cancebtn_clicked();
 
     void on_funcbox_currentIndexChanged(const QString &arg1);
+
+    void on_rttpinedit_returnPressed();
+
+    void on_devnameedit_returnPressed();
+
+    void on_channeledit_returnPressed();
 
 private:
     Ui::add *ui;

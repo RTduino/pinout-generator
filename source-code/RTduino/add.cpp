@@ -121,6 +121,11 @@ void add::display_add_edit(bool name, bool channel)
     ui->devnameedit->clear();
 }
 
+void add::set_insert_info()
+{
+    ui->namelabel->setText("插入引脚");
+}
+
 void add::set_widget_info(QStringList &list)
 {
     ui->funcbox->setCurrentText(list.at(2));
@@ -129,3 +134,21 @@ void add::set_widget_info(QStringList &list)
     ui->channeledit->setText(list.at(4));
     ui->namelabel->setText("修改引脚");
 }
+
+void add::on_rttpinedit_returnPressed()
+{
+    on_addbtn_clicked();
+}
+
+
+void add::on_devnameedit_returnPressed()
+{
+    on_addbtn_clicked();
+}
+
+
+void add::on_channeledit_returnPressed()
+{
+    on_addbtn_clicked();
+}
+

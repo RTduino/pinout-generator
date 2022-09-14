@@ -15,6 +15,7 @@
 #include <QStringList>
 #include <QRegularExpression>
 #include "add.h"
+#include <QSettings>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Widget; }
@@ -34,6 +35,9 @@ class Widget : public QWidget
 public:
     Widget(QWidget *parent = nullptr);
     ~Widget();
+
+    void insert_item_table(QStringList &pinlist);
+
     void load_data_from_dir();
 
     void load_data_to_dir();
@@ -91,6 +95,10 @@ private slots:
 
     void on_clearbtn_clicked();
 
+    void on_project_linkActivated(const QString &link);
+
+    void on_autor_linkActivated(const QString &link);
+
 private:
     Ui::Widget *ui;
 
@@ -105,6 +113,8 @@ private:
     SomeInfo sinfo;
 
     QString changeardpin;
+
+    QString insertardpin;
 
     QList<Pinmap *> pinmaplist;
 };

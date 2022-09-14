@@ -1,6 +1,6 @@
 #include "widget.h"
 #include "ui_widget.h"
-
+#include <QDesktopServices>
 
 Widget::Widget(QWidget *parent)
     : QWidget(parent)
@@ -9,7 +9,8 @@ Widget::Widget(QWidget *parent)
     ui->setupUi(this);
     ui->fcpuedit->setStyleSheet("font-size:30px; color:rgb(255,0,0);");
     ui->treeWidget->setContextMenuPolicy(Qt::CustomContextMenu);
-
+    ui->autor->setText(tr("<a href = 'https://github.com/liYony'>https://github.com/liYony</a>"));
+    ui->project->setText(tr("<a href = 'https://github.com/RTduino/pinout-generator'>https://github.com/RTduino/pinout-generator</a>"));
     addui = new add;
     connect(addui,SIGNAL(send_add_data(QStringList &)),this,SLOT(recive_add_data(QStringList &)));
 }
@@ -39,7 +40,7 @@ void Widget::remove_item_table(QStringList &pinlist)
     {
         return;
     }
-    QMessageBox::StandardButton result = QMessageBox::question( this,"Delete Arduino Pin","Are you sure you want to delete "+pinlist.at(0)+"?");
+    QMessageBox::StandardButton result = QMessageBox::question( this,"删除 Arduino Pin","你确定要删除 "+pinlist.at(0)+" 这个引脚吗？");
 
     if(result == QMessageBox::No)
         return;
@@ -68,9 +69,22 @@ void Widget::change_item_table(QStringList &pinlist)
     addui->show();
 }
 
+void Widget::insert_item_table(QStringList &pinlist)
+{
+    if(pinlist.at(0).isEmpty()||pinlist.at(0) == "ins")
+    {
+        add_item_table();
+        return;
+    }
+    insertardpin = pinlist.at(0);
+    addui->set_insert_info();
+    addui->show();
+}
+
 void Widget::add_item_table()
 {
     changeardpin = "";
+    insertardpin = "";
     addui->show();
 }
 
@@ -127,10 +141,10 @@ void Widget::clear_table_data()
 {
     if(pinmaplist.isEmpty())
     {
-        QMessageBox::critical(this,"Error","It's already empty!");
+        QMessageBox::critical(this,"错误","数据已经被清空了！");
         return;
     }
-    QMessageBox::StandardButton result = QMessageBox::question( this,"Clear Table","Are you sure you want to clear table?");
+    QMessageBox::StandardButton result = QMessageBox::question( this,"清空数据","你确定要清空所有数据吗？");
 
     if(result == QMessageBox::No)
         return;
@@ -143,29 +157,37 @@ void Widget::clear_table_data()
 
 void Widget::on_dirbtn_clicked()
 {
-    tmprttBspdirpath = QFileDialog::getExistingDirectory( this, "Choose RT-Thread BSP Directory",  "/");
-    ui->diredit->setText(tmprttBspdirpath);
-}
-
-void Widget::on_importbtn_clicked()
-{
     QDir rttBspdir;
+    QSettings setting("./Setting.ini", QSettings::IniFormat);  //QSettings能记录一些程序中的信息，下次再打开时可以读取出来
+    QString lastPath = setting.value("LastFilePath").toString();  //获取上次的打开路径
+
+    tmprttBspdirpath = QFileDialog::getExistingDirectory( this, "Choose RT-Thread BSP Directory",lastPath);
+    ui->diredit->setText(tmprttBspdirpath);
 
     /* 判断路径格式是否正确 */
     tmprttBspdirpath = ui->diredit->text();
     if(tmprttBspdirpath.isEmpty())
     {
-        QMessageBox::critical(this,"Error","This is a empty path!");
+        QMessageBox::critical(this,"错误","请填写BSP路径！");
         return;
     }
     if(!rttBspdir.exists(tmprttBspdirpath))
     {
-        QString errinfo = tmprttBspdirpath + " does not exist!";
-        QMessageBox::critical(this,"Error",errinfo);
+        QString errinfo = tmprttBspdirpath + " 路径不存在！";
+        QMessageBox::critical(this,"错误",errinfo);
         return;
     }
 
     rttBspdirpath = QDir::fromNativeSeparators(ui->diredit->text());
+
+    if(!rttBspdirpath.isEmpty())
+    {
+        setting.setValue("LastFilePath",rttBspdirpath);  //记录路径到QSetting中保存
+    }
+}
+
+void Widget::on_importbtn_clicked()
+{
     /* import files */
     load_data_from_dir();
     refresh_to_widget();
@@ -173,11 +195,34 @@ void Widget::on_importbtn_clicked()
 
 void Widget::on_exportbtn_clicked()
 {
+    QDir rttBspdir;
+    QSettings setting("./Setting.ini", QSettings::IniFormat);  //QSettings能记录一些程序中的信息，下次再打开时可以读取出来
+    /* 判断路径格式是否正确 */
+    tmprttBspdirpath = ui->diredit->text();
+    if(tmprttBspdirpath.isEmpty())
+    {
+        QMessageBox::critical(this,"错误","请填写BSP路径！");
+        return;
+    }
+    if(!rttBspdir.exists(tmprttBspdirpath))
+    {
+        QString errinfo = tmprttBspdirpath + " 路径不存在！";
+        QMessageBox::critical(this,"错误",errinfo);
+        return;
+    }
+
+    rttBspdirpath = QDir::fromNativeSeparators(ui->diredit->text());
+
+    if(!rttBspdirpath.isEmpty())
+    {
+        setting.setValue("LastFilePath",rttBspdirpath);  //记录路径到QSetting中保存
+    }
     load_data_to_dir();
 }
 
 void Widget::recive_add_data(QStringList &strlist)
 {
+    qDebug() << changeardpin;
     if(!changeardpin.isEmpty())
     {
         foreach(auto i,pinmaplist)
@@ -188,6 +233,22 @@ void Widget::recive_add_data(QStringList &strlist)
                 i->io_function = strlist.at(0);
                 i->io_name = strlist.at(2);
                 i->rtthread_pin = strlist.at(1);
+            }
+        }
+        update_pinmaps();
+    }
+    else if(!insertardpin.isEmpty())
+    {
+        foreach(auto i,pinmaplist)
+        {
+            if(i->arduino_pin == insertardpin)
+            {
+                auto pmap = new Pinmap;
+                pmap->io_channel = strlist.at(3);
+                pmap->io_function = strlist.at(0);
+                pmap->io_name = strlist.at(2);
+                pmap->rtthread_pin = strlist.at(1);
+                pinmaplist.insert(pinmaplist.indexOf(i)+1, pmap);
             }
         }
         update_pinmaps();
@@ -218,5 +279,16 @@ void Widget::on_addbtn_clicked()
 void Widget::on_clearbtn_clicked()
 {
     clear_table_data();
+}
+
+void Widget::on_project_linkActivated(const QString &link)
+{
+    QDesktopServices::openUrl(QUrl(link,QUrl::TolerantMode));
+}
+
+
+void Widget::on_autor_linkActivated(const QString &link)
+{
+    QDesktopServices::openUrl(QUrl(link,QUrl::TolerantMode));
 }
 

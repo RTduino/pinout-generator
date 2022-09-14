@@ -2,6 +2,7 @@
 #include "ui_widget.h"
 #include "filecontent.h"
 #include <QDateTime>
+#include <QDesktopServices>
 
 /*************************************************处理文件到表格*************************************************/
 
@@ -96,24 +97,39 @@ void Widget::load_data_to_dir()
 {
     if(ui->fcpuedit->text().isEmpty())
     {
-        QMessageBox::critical(this,"Error","Please write the clock frequency of the BSP!");
+        QMessageBox::critical(this,"错误","请填写时钟频率！");
         return;
     }
     QDir arduinodir;
+    if(!arduinodir.exists(rttBspdirpath+"/applications"))
+    {
+        if(!arduinodir.mkdir(rttBspdirpath+"/applications"))
+        {
+            QString errinfo ="创建 "+rttBspdirpath+"/applications 文件夹失败！";
+            QMessageBox::critical(this,"错误",errinfo);
+        }
+    }
+
     if(!arduinodir.exists(ARDUINO_PINOUT_DIR))
     {
         if(!arduinodir.mkdir(ARDUINO_PINOUT_DIR))
         {
-            QString errinfo ="Failed to create folder : "+ARDUINO_PINOUT_DIR+". Please check if it is the BSP path!";
-            QMessageBox::critical(this,"Error",errinfo);
+            QString errinfo ="创建 "+ARDUINO_PINOUT_DIR+" 文件夹失败！";
+            QMessageBox::critical(this,"错误",errinfo);
         }
-        return;
     }
+
     get_some_info();
     write_data_to_cfile();
     write_data_to_hfile();
     write_data_to_scons();
     write_data_to_kconfig();
+    QMessageBox::StandardButton result = QMessageBox::question( this,"成功","代码生成成功，是否打开资源所在目录？");
+
+    if(result == QMessageBox::No)
+        return;
+
+    QDesktopServices::openUrl(QUrl(ARDUINO_PINOUT_DIR,QUrl::TolerantMode));
 }
 
 void Widget::get_some_info()

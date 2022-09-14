@@ -17,12 +17,15 @@ void Widget::on_treeWidget_customContextMenuRequested(const QPoint &pos)
     QMenu *Menu = new QMenu(this);
 
     QAction *addpin = new QAction(tr("添加引脚"), this);
+    QAction *insertpin = new QAction(tr("插入引脚"), this);
     QAction *changepin = new QAction(tr("修改引脚"), this);
     QAction *removepin = new QAction(tr("删除引脚"), this);
     QAction *refreshtb = new QAction(tr("刷新页面"), this);
     QAction *cleartb = new QAction(tr("清空页面"), this);
 
     addpin->setData( pininfo << "add");
+    pininfo.removeLast();
+    insertpin->setData( pininfo << "ins");
     pininfo.removeLast();
     changepin->setData(pininfo << "chg");
     pininfo.removeLast();
@@ -35,6 +38,7 @@ void Widget::on_treeWidget_customContextMenuRequested(const QPoint &pos)
 
     //把QAction对象添加到菜单上
     Menu->addAction(addpin);
+    Menu->addAction(insertpin);
     Menu->addAction(changepin);
     Menu->addAction(removepin);
     Menu->addAction(refreshtb);
@@ -47,6 +51,7 @@ void Widget::on_treeWidget_customContextMenuRequested(const QPoint &pos)
 
     //连接鼠标右键点击信号
     connect(addpin, SIGNAL(triggered()), this, SLOT(on_menu_envent()));
+    connect(insertpin, SIGNAL(triggered()), this, SLOT(on_menu_envent()));
     connect(changepin, SIGNAL(triggered()), this, SLOT(on_menu_envent()));
     connect(removepin, SIGNAL(triggered()), SLOT(on_menu_envent()));
     connect(refreshtb, SIGNAL(triggered()), this, SLOT(on_menu_envent()));
@@ -68,6 +73,10 @@ void Widget::on_menu_envent()
     if(pitemlist.last() == "chg")
     {
         change_item_table(pitemlist);
+    }
+    else if(pitemlist.last() == "ins")
+    {
+       insert_item_table(pitemlist);
     }
     else if(pitemlist.last() == "rem")
     {
