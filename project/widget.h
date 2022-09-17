@@ -62,7 +62,7 @@ public:
     void prase_pin_item_from_string(QString &pinline);
     void pin_set_io_function(Pinmap *pinmap);
 
-    void  load_data_to_dir();
+    void load_data_to_dir();
     void write_data_to_cfile();
     void write_data_to_hfile();
     void write_data_to_kconfig();
@@ -74,21 +74,13 @@ private slots:
     void on_menu_item_change_event();
     void on_addbtn_clicked();
     void on_recive_pininfo_data(QStringList &pininfo);
-
     void on_dirbtn_clicked();
-
     void on_importbtn_clicked();
-
     void on_exportbtn_clicked();
-
     void on_refreashbtn_clicked();
-
     void on_clearbtn_clicked();
-
     void on_project_linkActivated(const QString &link);
-
     void on_autor_linkActivated(const QString &link);
-
     void on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item, int column);
 
 private:
