@@ -25,7 +25,7 @@
   <property name="windowTitle">
    <string>RTduino Pinout Generator</string>
   </property>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>21</x>
@@ -45,7 +45,7 @@
          </font>
         </property>
         <property name="text">
-         <string>RTduino Pinout 引脚生成器</string>
+         <string>RTduino引脚(Pinout)生成器</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>

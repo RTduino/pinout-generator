@@ -1,0 +1,73 @@
+#include "widget.h"
+#include "ui_widget.h"
+
+
+void Widget::all_ui_component_refresh()
+{
+    table_all_items_refresh();
+    serials_add_items();
+    led_ss_pin_add_items();
+}
+
+void Widget::table_add_item(Pinmap &pin)
+{
+    QTreeWidgetItem* item=new QTreeWidgetItem();
+    item->setText(0,pin.arduino_pin);
+    item->setText(1,pin.rtthread_pin);
+    item->setText(2,pin.io_function);
+    item->setText(3,pin.io_name);
+    item->setText(4,pin.io_channel);
+
+    ui->treeWidget->addTopLevelItem(item);
+}
+
+void Widget::table_all_items_refresh()
+{
+    ui->treeWidget->clear();
+    foreach(auto pinitem,pinmaplist.Allpinlist)
+    {
+        table_add_item(*pinitem);
+    }
+}
+
+void Widget::serials_add_items()
+{
+    QString curs2(ui->s2box->currentText());
+    QString curs3(ui->s3box->currentText());
+    QStringList uartlist("NULL");
+    ui->s2box->clear();
+    ui->s3box->clear();
+    foreach(auto i,pinmaplist.Allpinlist)
+    {
+        if(i->io_name.mid(0,4) == "uart")
+        {
+            uartlist.removeOne(i->io_name);
+            uartlist.append(i->io_name);
+        }
+    }
+    ui->s2box->addItems(uartlist);
+    ui->s3box->addItems(uartlist);
+    ui->s2box->setCurrentText(curs2);
+    ui->s3box->setCurrentText(curs3);
+}
+
+void Widget::led_ss_pin_add_items()
+{
+    QString led(ui->ledbox->currentText());
+    QString spi(ui->spissbox->currentText());
+    QStringList ledlist("NULL");
+    ui->ledbox->clear();
+    ui->spissbox->clear();
+    foreach(auto i,pinmaplist.Allpinlist)
+    {
+        if(i->io_function != "ADC")
+        {
+            ledlist.removeOne(i->arduino_pin);
+            ledlist.append(i->arduino_pin);
+        }
+    }
+    ui->ledbox->addItems(ledlist);
+    ui->spissbox->addItems(ledlist);
+    ui->ledbox->setCurrentText(led);
+    ui->spissbox->setCurrentText(spi);
+}

@@ -9,22 +9,23 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    File.cpp \
-    Menu.cpp \
-    Pinmap.cpp \
-    Tableshow.cpp \
-    add.cpp \
+    filein.cpp \
+    fileout.cpp \
     main.cpp \
+    mainUI.cpp \
+    menupin.cpp \
+    pininfoui.cpp \
+    pinmap.cpp \
     widget.cpp
 
 HEADERS += \
-    Pinmap.h \
-    add.h \
-    filecontent.h \
+    fileinfo.h \
+    pininfoui.h \
+    pinmap.h \
     widget.h
 
 FORMS += \
-    add.ui \
+    pininfoui.ui \
     widget.ui
 
 # Default rules for deployment.
@@ -32,5 +33,5 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-TARGET=RTduino-pinout
+TARGET=pinoutRTduino
 RC_ICONS = RTduino.ico
