@@ -56,13 +56,16 @@ public:
     void table_add_item(Pinmap &pin);
     void table_all_items_refresh();
     void serials_add_items();
+    void spi_add_items();
+    void i2c_add_items();
     void led_ss_pin_add_items();
+    void all_ui_reset();
 
     void load_data_from_dir();
     void prase_pin_item_from_string(QString &pinline);
     void pin_set_io_function(Pinmap *pinmap);
 
-    void load_data_to_dir();
+    void  load_data_to_dir();
     void write_data_to_cfile();
     void write_data_to_hfile();
     void write_data_to_kconfig();

@@ -61,26 +61,74 @@ void Widget::load_data_from_dir()
         return;
     }
 
-    QFile file(rttBspdirpath+"/applications/arduino_pinout/pins_arduino.c");
-    if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    QFile cfile(rttBspdirpath+"/applications/arduino_pinout/pins_arduino.c");
+    if(!cfile.open(QIODevice::ReadOnly | QIODevice::Text))
     {
         return;
     }
-    QTextStream in(&file);
-    while(!in.atEnd())
+    QTextStream cin(&cfile);
+    while(!cin.atEnd())
     {
-        QString line_date = in.readLine();
+        QString line_date = cin.readLine();
         if(line_date.mid(0,1) == "{")
         {
             while(1)
             {
-                QString line_date = in.readLine();
-                if(line_date.mid(0,2) == "};"||in.atEnd())
+                QString line_date = cin.readLine();
+                if(line_date.mid(0,2) == "};"||cin.atEnd())
                     break;
                 /* 解析文件 */
                 prase_pin_item_from_string(line_date);
             }
         }
     }
-    file.close();
+    cfile.close();
+    all_ui_component_refresh();
+    QFile hfile(rttBspdirpath+"/applications/arduino_pinout/pins_arduino.h");
+    if(!hfile.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        return;
+    }
+    QTextStream hin(&hfile);
+    while(!hin.atEnd())
+    {
+        QString line_date = hin.readLine();
+        QString showui;
+        if(line_date.mid(0,43) == "#define RTDUINO_DEFAULT_HWTIMER_DEVICE_NAME")
+        {
+            showui = line_date.mid(43,line_date.size()-43);
+            showui.remove(QRegExp("^ +\\s*"));
+            ui->timedit->setText(showui.mid(1,showui.size()-2));
+        }
+        if(line_date.mid(0,35) == "#define RTDUINO_SERIAL2_DEVICE_NAME")
+        {
+            showui = line_date.mid(35,line_date.size()-35);
+            showui.remove(QRegExp("^ +\\s*"));
+            ui->s2box->setCurrentText(showui.mid(1,showui.size()-2));
+        }
+        if(line_date.mid(0,35) == "#define RTDUINO_SERIAL3_DEVICE_NAME")
+        {
+            showui = line_date.mid(35,line_date.size()-35);
+            showui.remove(QRegExp("^ +\\s*"));
+            ui->s3box->setCurrentText(showui.mid(1,showui.size()-2));
+        }
+        if(line_date.mid(0,18) == "#define LED_BUITIN")
+        {
+            showui =  QRegularExpression("([ADC]{1,3}\\d+)").match(line_date).captured(0);
+            ui->ledbox->setCurrentText(showui);
+        }
+        if(line_date.mid(0,10) == "#define SS")
+        {
+            showui =  QRegularExpression("([ADC]{1,3}\\d+)").match(line_date).captured(0);
+            ui->spissbox->setCurrentText(showui);
+        }
+        if(line_date.mid(0,13) == "#define F_CPU")
+        {
+            showui =  QRegularExpression("\\s([0-9]+)000000L").match(line_date).captured(1);
+            ui->fcpuedit->setText(showui);
+        }
+        showui =  QRegularExpression(".*?\\d+-\\d+-\\d+\\s+(.*?)\\s").match(line_date).captured(1);
+        if(!showui.isEmpty())
+            ui->autoredit->setText(showui);
+    }
 }

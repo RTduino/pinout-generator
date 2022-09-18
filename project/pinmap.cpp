@@ -37,7 +37,7 @@ void Pinmaplist::fill_pinmap_notes(Pinmap *pinmap)
     if(pinmap->io_name.mid(0,3) == "pwm")
         pinmap->io_notes = "/* PWM */";
     else if(pinmap->io_name.mid(0,3) == "i2c")
-        pinmap->io_notes = "/* I2C(Wire) */";
+        pinmap->io_notes = "/* I2C (Wire) */";
     else if(pinmap->io_name.mid(0,3) == "usb")
         pinmap->io_notes = "/* SerialUSB */";
     else if(pinmap->io_name.mid(0,4) == "uart")
@@ -56,7 +56,7 @@ void Pinmaplist::fill_pinmap_notes(Pinmap *pinmap)
     else if(pinmap->io_name.mid(0,3) == "spi")
         pinmap->io_notes = "/* SPI */";
     else
-        pinmap->io_function = "";
+        pinmap->io_notes = "";
 }
 
 /*

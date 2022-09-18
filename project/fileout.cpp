@@ -81,6 +81,12 @@ void Widget::write_data_to_cfile()
     out << "{\n";
     foreach(auto pmap , pinmaplist.Allpinlist)
     {
+        if(pmap->arduino_pin == ui->ledbox->currentText())
+            pmap->io_notes = "/* LED_BUILTIN */";
+
+        if(pmap->arduino_pin == ui->spissbox->currentText())
+            pmap->io_notes = "/* SS_PIN_SPI */";
+
         QString linestr = "    {";
         if(!pmap->arduino_pin.isEmpty())
             linestr += pmap->arduino_pin;
@@ -127,17 +133,18 @@ void Widget::write_data_to_hfile()
     }
     out << "\n";
 
-    out << "#define F_CPU          "+ui->fcpuedit->text()+"000000L\n\n";
+    out << "#define F_CPU          "+ui->fcpuedit->text()+"000000L  /* CPU:"+ui->fcpuedit->text()+"MHz */\n\n";
     if(!(ui->ledbox->currentText() == "NULL"))
     {
-        out << "#define LED_BUITIN     "+ui->ledbox->currentText()+"\n\n";
+        out << "#define LED_BUITIN     "+ui->ledbox->currentText()+"  /* Default Built-in LED */\n\n";
     }
 
     foreach(auto i,pinmaplist.Allpinlist)
     {
         if(i->io_name.mid(0,3) == "i2c")
         {
-            out << "#define RTDUINO_DEFAULT_IIC_BUS_NAME      \""+i->io_name+"\"\n\n";
+            out << "/* "+i->io_name+" - xxx-SDA xxx-SCL */\n";
+            out << "#define RTDUINO_DEFAULT_IIC_BUS_NAME    \""+i->io_name+"\"\n\n";
             break;
         }
     }
@@ -147,7 +154,8 @@ void Widget::write_data_to_hfile()
         {
             if(!(ui->spissbox->currentText() == "NULL"))
             {
-                out << "#define SS      "+ui->spissbox->currentText()+"\n";
+                out << "/* "+i->io_name+" - xxx-SCK  xxx-MISO  xxx-MOSI */\n";
+                out << "#define SS      "+ui->spissbox->currentText()+"  /* Chip select pin of default spi */\n";
             }
             out << "#define RTDUINO_DEFAULT_SPI_BUS_NAME      \""+i->io_name+"\"\n\n";
             break;
@@ -155,10 +163,12 @@ void Widget::write_data_to_hfile()
     }
     if(!(ui->s2box->currentText() == "NULL"))
     {
+        out << "/* "+ui->s2box->currentText()+" - xxx-TX  xxx-RX */\n";
         out << "#define RTDUINO_SERIAL2_DEVICE_NAME      \""+ui->s2box->currentText()+"\"\n\n";
     }
     if(!(ui->s3box->currentText() == "NULL"))
     {
+        out << "/* "+ui->s3box->currentText()+" - xxx-TX  xxx-RX */\n";
         out << "#define RTDUINO_SERIAL3_DEVICE_NAME      \""+ui->s3box->currentText()+"\"\n\n";
     }
     if(!ui->timedit->text().isEmpty())
@@ -213,15 +223,16 @@ void Widget::write_data_to_kconfig()
             varlist.append("    select BSP_USING_DAC"+i->io_name.mid(3,i->io_name.size()-3)+"\n");
         }
     };
+    int pwmindex = varlist.size();
     foreach(auto i,pinmaplist.Allpinlist)
     {
         if(i->io_name.mid(0,3) == "pwm")
         {
             int abschannel =qAbs(i->io_channel.toInt());
             varlist.removeOne("    select BSP_USING_PWM\n");
-            varlist.append("    select BSP_USING_PWM\n");
+            varlist.insert(pwmindex,"    select BSP_USING_PWM\n");
             varlist.removeOne("    select BSP_USING_PWM"+i->io_name.mid(3,i->io_name.size()-3)+"\n");
-            varlist.append("    select BSP_USING_PWM"+i->io_name.mid(3,i->io_name.size()-3)+"\n");
+            varlist.insert(pwmindex+1,"    select BSP_USING_PWM"+i->io_name.mid(3,i->io_name.size()-3)+"\n");
             varlist.removeOne("    select BSP_USING_PWM"+i->io_name.mid(3,i->io_name.size()-3)+"_CH"+QString::number(abschannel)+"\n");
             varlist.append("    select BSP_USING_PWM"+i->io_name.mid(3,i->io_name.size()-3)+"_CH"+QString::number(abschannel)+"\n");
         }

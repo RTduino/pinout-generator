@@ -33,5 +33,5 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-TARGET=pinoutRTduino
+TARGET=pinout-generator
 RC_ICONS = RTduino.ico

@@ -51,6 +51,16 @@ void Widget::on_dirbtn_clicked()
     {
         setting.setValue("LastFilePath",rttBspdirpath);  //记录路径到QSetting中保存
     }
+
+    all_ui_reset();
+    all_ui_component_refresh();
+    if(!rttBspdir.exists(rttBspdirpath+"/applications/arduino_pinout"))
+        return;
+    QMessageBox::StandardButton result = QMessageBox::question( this,"成功","该路径已经存在arduino_pinout文件夹，是否导入？");
+
+    if(result == QMessageBox::No)
+        return;
+    on_importbtn_clicked();
 }
 
 void Widget::on_importbtn_clicked()

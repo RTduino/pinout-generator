@@ -98,6 +98,7 @@ void Widget::on_menu_item_change_event()
     QStringList pitemlist( pEven->data().toStringList());
     if(pitemlist.last() == "chg")
     {
+        qDebug()<<pitemlist;
         menu_change_event(pitemlist);
         pinUI->show();
     }
