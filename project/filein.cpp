@@ -100,6 +100,18 @@ void Widget::load_data_from_dir()
             showui.remove(QRegExp("^ +\\s*"));
             ui->timedit->setText(showui.mid(1,showui.size()-2));
         }
+        if(line_date.mid(0,36) == "#define RTDUINO_DEFAULT_IIC_BUS_NAME")
+        {
+            showui = line_date.mid(36,line_date.size()-36);
+            showui.remove(QRegExp("^ +\\s*"));
+            ui->i2cdevbox->setCurrentText(showui.mid(1,showui.size()-2));
+        }
+        if(line_date.mid(0,36) == "#define RTDUINO_DEFAULT_SPI_BUS_NAME")
+        {
+            showui = line_date.mid(36,line_date.size()-36);
+            showui.remove(QRegExp("^ +\\s*"));
+            ui->spidevbox->setCurrentText(showui.mid(1,showui.size()-2));
+        }
         if(line_date.mid(0,35) == "#define RTDUINO_SERIAL2_DEVICE_NAME")
         {
             showui = line_date.mid(35,line_date.size()-35);

@@ -23,6 +23,7 @@ public:
 
     void fill_pinmap_arduino_and_name();
     void fill_pinmap_notes(Pinmap *pinmap);
+    void update_pinmap_notes();
     void adjust_order_to_keep_arduino();
     void remove_item_by_arduinopin(QString &ardpin);
     QString change_item_by_arduinopin(QString &ardpin,QStringList &pinmap);

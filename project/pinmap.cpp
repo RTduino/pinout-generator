@@ -37,26 +37,29 @@ void Pinmaplist::fill_pinmap_notes(Pinmap *pinmap)
     if(pinmap->io_name.mid(0,3) == "pwm")
         pinmap->io_notes = "/* PWM */";
     else if(pinmap->io_name.mid(0,3) == "i2c")
-        pinmap->io_notes = "/* I2C (Wire) */";
+        pinmap->io_notes = "/* I2C-xx (Wire) */";
     else if(pinmap->io_name.mid(0,3) == "usb")
         pinmap->io_notes = "/* SerialUSB */";
     else if(pinmap->io_name.mid(0,4) == "uart")
-        pinmap->io_notes = "/* Serial */";
+        pinmap->io_notes = "/* Serial-xx */";
     else if(pinmap->io_name.mid(0,3) == "adc")
     {
-        if(pinmap->rtthread_pin == "RT_NULL"&&pinmap->io_channel == "16")
-            pinmap->io_notes = "/* ADC, On-Chip: internal temperature sensor, ADC_CHANNEL_TEMPSENSOR */";
-        else if(pinmap->rtthread_pin == "RT_NULL"&&pinmap->io_channel == "17")
-            pinmap->io_notes = "/* ADC, On-Chip: internal reference voltage, ADC_CHANNEL_VREFINT */";
-        else
-             pinmap->io_notes = "/* ADC */";
+        pinmap->io_notes = "/* ADC */";
     }
     else if(pinmap->io_name.mid(0,3) == "dac")
         pinmap->io_notes = "/* DAC */";
     else if(pinmap->io_name.mid(0,3) == "spi")
-        pinmap->io_notes = "/* SPI */";
+        pinmap->io_notes = "/* SPI-xx */";
     else
         pinmap->io_notes = "";
+}
+
+void Pinmaplist::update_pinmap_notes()
+{
+    foreach(auto i,this->Allpinlist)
+    {
+        fill_pinmap_notes(i);
+    }
 }
 
 /*

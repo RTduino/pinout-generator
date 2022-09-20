@@ -95,6 +95,7 @@ void Widget::on_exportbtn_clicked()
         setting.setValue("LastFilePath",rttBspdirpath);  //记录路径到QSetting中保存
     }
     all_ui_component_refresh();
+    pinmaplist.update_pinmap_notes();
     load_data_to_dir();
 }
 

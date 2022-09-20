@@ -85,7 +85,13 @@ void Widget::write_data_to_cfile()
             pmap->io_notes = "/* LED_BUILTIN */";
 
         if(pmap->arduino_pin == ui->spissbox->currentText())
-            pmap->io_notes = "/* SS_PIN_SPI */";
+            pmap->io_notes = "/* SPI-SS */";
+
+        if(pmap->io_name == ui->s2box->currentText())
+            pmap->io_notes = "/* Serial2-xx */";
+
+        if(pmap->io_name == ui->s3box->currentText())
+            pmap->io_notes = "/* Serial3-xx */";
 
         QString linestr = "    {";
         if(!pmap->arduino_pin.isEmpty())
@@ -136,39 +142,30 @@ void Widget::write_data_to_hfile()
     out << "#define F_CPU          "+ui->fcpuedit->text()+"000000L  /* CPU:"+ui->fcpuedit->text()+"MHz */\n\n";
     if(!(ui->ledbox->currentText() == "NULL"))
     {
-        out << "#define LED_BUITIN     "+ui->ledbox->currentText()+"  /* Default Built-in LED */\n\n";
+        out << "#define LED_BUILTIN     "+ui->ledbox->currentText()+"  /* Default Built-in LED */\n\n";
     }
-
-    foreach(auto i,pinmaplist.Allpinlist)
+    if(!(ui->i2cdevbox->currentText() == "NULL"))
     {
-        if(i->io_name.mid(0,3) == "i2c")
-        {
-            out << "/* "+i->io_name+" - xxx-SDA xxx-SCL */\n";
-            out << "#define RTDUINO_DEFAULT_IIC_BUS_NAME    \""+i->io_name+"\"\n\n";
-            break;
-        }
+        out << "/* "+ui->i2cdevbox->currentText()+" : xxx-SDA xxx-SCL */\n";
+        out << "#define RTDUINO_DEFAULT_IIC_BUS_NAME    \""+ui->i2cdevbox->currentText()+"\"\n\n";
     }
-    foreach(auto i,pinmaplist.Allpinlist)
+    if(!(ui->spidevbox->currentText() == "NULL"))
     {
-        if(i->io_name.mid(0,3) == "spi")
+        out << "/* "+ui->spidevbox->currentText()+" : xxx-SCK  xxx-MISO  xxx-MOSI */\n";
+        if(!(ui->spissbox->currentText() == "NULL"))
         {
-            if(!(ui->spissbox->currentText() == "NULL"))
-            {
-                out << "/* "+i->io_name+" - xxx-SCK  xxx-MISO  xxx-MOSI */\n";
-                out << "#define SS      "+ui->spissbox->currentText()+"  /* Chip select pin of default spi */\n";
-            }
-            out << "#define RTDUINO_DEFAULT_SPI_BUS_NAME      \""+i->io_name+"\"\n\n";
-            break;
+            out << "#define SS      "+ui->spissbox->currentText()+"  /* Chip select pin of default spi */\n";
         }
+        out << "#define RTDUINO_DEFAULT_SPI_BUS_NAME      \""+ui->spidevbox->currentText()+"\"\n\n";
     }
     if(!(ui->s2box->currentText() == "NULL"))
     {
-        out << "/* "+ui->s2box->currentText()+" - xxx-TX  xxx-RX */\n";
+        out << "/* Serial2 : xxx-TX  xxx-RX */\n";
         out << "#define RTDUINO_SERIAL2_DEVICE_NAME      \""+ui->s2box->currentText()+"\"\n\n";
     }
     if(!(ui->s3box->currentText() == "NULL"))
     {
-        out << "/* "+ui->s3box->currentText()+" - xxx-TX  xxx-RX */\n";
+        out << "/* Serial3 : xxx-TX  xxx-RX */\n";
         out << "#define RTDUINO_SERIAL3_DEVICE_NAME      \""+ui->s3box->currentText()+"\"\n\n";
     }
     if(!ui->timedit->text().isEmpty())
