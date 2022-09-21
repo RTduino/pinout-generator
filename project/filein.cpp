@@ -124,7 +124,7 @@ void Widget::load_data_from_dir()
             showui.remove(QRegExp("^ +\\s*"));
             ui->s3box->setCurrentText(showui.mid(1,showui.size()-2));
         }
-        if(line_date.mid(0,18) == "#define LED_BUITIN")
+        if(line_date.mid(0,19) == "#define LED_BUILTIN")
         {
             showui =  QRegularExpression("([ADC]{1,3}\\d+)").match(line_date).captured(0);
             ui->ledbox->setCurrentText(showui);

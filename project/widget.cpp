@@ -132,3 +132,9 @@ void Widget::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item, int column)
     menu_change_event(pininfo);
     pinUI->show();
 }
+
+void Widget::on_ledbox_currentIndexChanged(const QString &arg1)
+{
+    code_add_items();
+}
+

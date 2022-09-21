@@ -45,12 +45,13 @@ void Widget::load_data_to_dir()
     write_data_to_hfile();
     write_data_to_scons();
     write_data_to_kconfig();
+    write_data_to_maincpp();
     QMessageBox::StandardButton result = QMessageBox::question( this,"成功","代码生成成功，是否打开资源所在目录？");
 
     if(result == QMessageBox::No)
         return;
 
-    QDesktopServices::openUrl(QUrl(rttBspdirpath+"/applications/arduino_pinout",QUrl::TolerantMode));
+    QDesktopServices::openUrl(QUrl(rttBspdirpath+"/applications",QUrl::TolerantMode));
 }
 
 void Widget::write_data_to_cfile()
@@ -277,4 +278,46 @@ void Widget::write_data_to_scons()
     QTextStream out(&sconsfile);
 
     out << FILESCONS_CODE;
+}
+
+void Widget::write_data_to_maincpp()
+{
+    QFile cppfile(rttBspdirpath+"/applications/arduino_main.cpp");
+    if(!cppfile.open(QIODevice::WriteOnly | QIODevice::Text|QFile::Truncate))
+    {
+        return;
+    }
+
+    QTextStream out(&cppfile);
+    /* License */
+    out << FILE_RTT_LICENSE_PART;
+
+    out << "#include <Arduino.h>\n\n";
+    out << "void setup(void)\n";
+    out << "{\n";
+    out << "    /* put your setup code here, to run once: */\n";
+    if(ui->mainbox->currentIndex() == 1)
+    {
+        out << "    pinMode(LED_BUILTIN, OUTPUT);\n";
+    }
+    else
+    {
+        out << "    Serial.begin();\n";
+    }
+
+    out << "}\n\n";
+    out << "void loop(void)\n";
+    out << "{\n";
+    out << "    /* put your main code here, to run repeatedly: */\n";
+    if(ui->mainbox->currentIndex() == 1)
+    {
+        out << "    digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));\n";
+        out << "    delay(100);\n";
+    }
+    else
+    {
+        out << "    Serial.println(\"Hello Arduino!\");\n";
+        out << "    delay(800);\n";
+    }
+    out << "}\n";
 }

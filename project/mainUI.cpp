@@ -12,6 +12,7 @@ void Widget::all_ui_reset()
     ui->timedit->clear();
     ui->autoredit->clear();
     ui->fcpuedit->clear();
+    ui->mainbox->clear();
 }
 void Widget::all_ui_component_refresh()
 {
@@ -20,6 +21,7 @@ void Widget::all_ui_component_refresh()
     led_ss_pin_add_items();
     spi_add_items();
     i2c_add_items();
+    code_add_items();
 }
 
 void Widget::table_add_item(Pinmap &pin)
@@ -80,6 +82,19 @@ void Widget::spi_add_items()
     }
     ui->spidevbox->addItems(spilist);
     ui->spidevbox->setCurrentText(curspi);
+}
+
+void Widget::code_add_items()
+{
+    QString curcode(ui->mainbox->currentText());
+    QStringList codelist("Hello Arduino");
+    ui->mainbox->clear();
+    if(!(ui->ledbox->currentText() == "NULL"))
+    {
+        codelist.append("Led blinking");
+    }
+    ui->mainbox->addItems(codelist);
+    ui->mainbox->setCurrentText(curcode);
 }
 
 void Widget::i2c_add_items()

@@ -57,6 +57,7 @@ public:
     void table_all_items_refresh();
     void serials_add_items();
     void spi_add_items();
+    void code_add_items();
     void i2c_add_items();
     void led_ss_pin_add_items();
     void all_ui_reset();
@@ -70,6 +71,7 @@ public:
     void write_data_to_hfile();
     void write_data_to_kconfig();
     void write_data_to_scons();
+    void write_data_to_maincpp();
     void get_date_info();
 
 private slots:
@@ -85,6 +87,8 @@ private slots:
     void on_project_linkActivated(const QString &link);
     void on_autor_linkActivated(const QString &link);
     void on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item, int column);
+
+    void on_ledbox_currentIndexChanged(const QString &arg1);
 
 private:
     Ui::Widget *ui;
