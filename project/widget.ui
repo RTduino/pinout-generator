@@ -25,7 +25,7 @@
   <property name="windowTitle">
    <string>RTduino Pinout Generator</string>
   </property>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -776,16 +776,6 @@
               <pointsize>15</pointsize>
              </font>
             </property>
-            <item>
-             <property name="text">
-              <string>Hello Arduino</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Led blinking</string>
-             </property>
-            </item>
            </widget>
           </item>
          </layout>

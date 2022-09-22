@@ -18,10 +18,10 @@ void Widget::all_ui_component_refresh()
 {
     table_all_items_refresh();
     serials_add_items();
-    led_ss_pin_add_items();
     spi_add_items();
     i2c_add_items();
     code_add_items();
+    led_ss_pin_add_items();
 }
 
 void Widget::table_add_item(Pinmap &pin)
@@ -91,7 +91,7 @@ void Widget::code_add_items()
     ui->mainbox->clear();
     if(!(ui->ledbox->currentText() == "NULL"))
     {
-        codelist.append("Led blinking");
+        codelist.append("LED blinking");
     }
     ui->mainbox->addItems(codelist);
     ui->mainbox->setCurrentText(curcode);

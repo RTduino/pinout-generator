@@ -262,8 +262,10 @@ void Widget::write_data_to_kconfig()
         out << i;
     }
     out << "    imply RTDUINO_USING_SERVO\n";
-    out << "    imply RTDUINO_USING_WIRE\n";
-    out << "    imply RTDUINO_USING_SPI\n";
+    if(ui->i2cdevbox->currentText() != "NULL")
+        out << "    imply RTDUINO_USING_WIRE\n";
+    if(ui->spidevbox->currentText() != "NULL")
+        out << "    imply RTDUINO_USING_SPI\n";
     out << "    default n";
 }
 

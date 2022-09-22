@@ -14,6 +14,7 @@ Widget::Widget(QWidget *parent)
     ui->project->setText(tr("<a href = 'https://github.com/RTduino/pinout-generator'>https://github.com/RTduino/pinout-generator</a>"));
     ui->fcpuedit->setStyleSheet("font-size:30px; color:rgb(255,0,0);");
     pinUI->setWindowModality(Qt::ApplicationModal);//设置界面不可点击
+    ui->addbtn->setShortcut(tr("shift+a"));
 }
 
 Widget::~Widget()
@@ -133,8 +134,7 @@ void Widget::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item, int column)
     pinUI->show();
 }
 
-void Widget::on_ledbox_currentIndexChanged(const QString &arg1)
+void Widget::on_ledbox_activated(const QString &arg1)
 {
     code_add_items();
 }
-
