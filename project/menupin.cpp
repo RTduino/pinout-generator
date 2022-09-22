@@ -52,6 +52,21 @@ void Widget::menu_insert_event(QStringList &list)
     insertpin = list.at(0);
 }
 
+void Widget::on_delbtn_clicked()
+{
+    QTreeWidgetItem  *curItem = ui->treeWidget->currentItem();
+    QStringList pininfo;
+    if(curItem == NULL)
+        return;
+
+    QString pin = curItem->text(0);
+    QMessageBox::StandardButton result = QMessageBox::question( this,"删除 Arduino Pin","你确定要删除 "+pin+" 这个引脚吗？");
+    if(result == QMessageBox::No)
+        return;
+    pinmaplist.remove_item_by_arduinopin(pin);
+    all_ui_component_refresh();
+}
+
 void Widget::menu_remove_event(QStringList &list)
 {
     if(list.at(0).isEmpty())

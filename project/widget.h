@@ -88,6 +88,7 @@ private slots:
     void on_autor_linkActivated(const QString &link);
     void on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item, int column);
     void on_ledbox_activated(const QString &arg1);
+    void on_delbtn_clicked();
 
 private:
     Ui::Widget *ui;

@@ -14,7 +14,8 @@ Widget::Widget(QWidget *parent)
     ui->project->setText(tr("<a href = 'https://github.com/RTduino/pinout-generator'>https://github.com/RTduino/pinout-generator</a>"));
     ui->fcpuedit->setStyleSheet("font-size:30px; color:rgb(255,0,0);");
     pinUI->setWindowModality(Qt::ApplicationModal);//设置界面不可点击
-    ui->addbtn->setShortcut(tr("shift+a"));
+    ui->addbtn->setShortcut(tr("a"));
+    ui->delbtn->setShortcut(tr("d"));
 }
 
 Widget::~Widget()
