@@ -186,7 +186,7 @@ void Widget::write_data_to_kconfig()
     QTextStream out(&kconfigfile);
     QStringList varlist;
     out << "config BSP_USING_ARDUINO\n";
-    out << "    bool \"Support Arduino\"\n";
+    out << "    bool \"Compatible with Arduino Ecosystem (RTduino)\"\n";
     out << "    select PKG_USING_RTDUINO\n";
     out << "    select BSP_USING_STLINK_TO_USART\n";
     if(!(ui->s2box->currentText() == "NULL"))
