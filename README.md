@@ -87,4 +87,8 @@
 
 ![image-20220920203942490](figures/image-20220920203942490.png)
 
-到这，基本就移植完了，最后就是为该bsp编写README.md文件夹了。
+到这，基本就移植完了，最后就是为该bsp编写RTduino的README.md文件（位于applications/arduino_pinout文件夹下）了。README.md可以参考以下BSP编写：
+
+- https://github.com/RT-Thread/rt-thread/tree/master/bsp/stm32/stm32f401-st-nucleo/applications/arduino_pinout
+- https://github.com/RT-Thread/rt-thread/tree/master/bsp/stm32/stm32f103-blue-pill/applications/arduino_pinout
+- https://github.com/RT-Thread/rt-thread/tree/master/bsp/stm32/stm32l475-atk-pandora/applications/arduino_pinout
