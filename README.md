@@ -1,10 +1,12 @@
 # 软件使用指南
 
-## 1、如何对接 [以stm32f103-blue-pill为例]
+pinout-generator是为了方便用户将BSP对接到RTduino上而设计的一个自动化源文件生成工具。下面以 [stm32f103-blue-pill](https://github.com/RT-Thread/rt-thread/tree/master/bsp/stm32/stm32f103-blue-pill/applications/arduino_pinout) 为例，展示如何使用本软件，并将该BSP对接到RTduino上。
 
-### 1.1、添加bsp路径
+## 1 如何对接
 
-### 1.2、添加RT-Thread引脚跟Arduino引脚的对应关系
+### 1.1 添加BSP路径
+
+### 1.2 添加RT-Thread引脚跟Arduino引脚的对应关系
 
 可以右键唤起菜单，或者直接点击快捷添加按钮，其他的像插入、删除等等，都是对这个表进行操作。
 
@@ -22,7 +24,7 @@
 
 ![image-20220920202116524](figures/image-20220920202116524.png)
 
-### 1.3、填写一些重要选项
+### 1.3 填写一些重要选项
 
 这时候我们再来看看这几个选项：
 
@@ -51,7 +53,7 @@
 
 ![image-20220920202756490](figures/image-20220920202756490.png)
 
-### 1.4、导出文件
+### 1.4 导出文件
 
 这时候我们就可以导出了，会生成以下几个重要文件
 
@@ -63,9 +65,9 @@
 - Sconscript：Scons构建脚本。
 - Kconfig：Kconfig配置文件。
 
-### 1.5、用户需要修改的地方
+### 1.5 用户需要修改的地方
 
-1、pins_arduino.c
+#### 1.5.1 pins_arduino.c
 
 ![image-20220920203147439](figures/image-20220920203147439.png)
 
@@ -73,7 +75,7 @@
 
 ![image-20220920203332254](figures/image-20220920203332254.png)
 
-2、pins_arduino.h
+#### 1.5.2 pins_arduino.h
 
 ![image-20220920203439163](figures/image-20220920203439163.png)
 
@@ -81,10 +83,14 @@
 
 ![image-20220920203512658](figures/image-20220920203512658.png)
 
-3、Kconfig
+#### 1.5.3 Kconfig
 
 在arduino_pinout文件夹中，会生成一个Kconfig文件夹，这个文件夹我们是不能留的，但是需要把里面的内容拷贝到board文件夹下的Kconfig。
 
 ![image-20220920203942490](figures/image-20220920203942490.png)
 
-到这，基本就移植完了，最后就是为该bsp编写README.md文件夹了。
+到这，基本就移植完了，最后就是为该bsp编写RTduino的README.md文件（位于applications/arduino_pinout文件夹下）了。README.md可以参考以下BSP编写：
+
+- https://github.com/RT-Thread/rt-thread/tree/master/bsp/stm32/stm32f401-st-nucleo/applications/arduino_pinout
+- https://github.com/RT-Thread/rt-thread/tree/master/bsp/stm32/stm32f103-blue-pill/applications/arduino_pinout
+- https://github.com/RT-Thread/rt-thread/tree/master/bsp/stm32/stm32l475-atk-pandora/applications/arduino_pinout
