@@ -72,6 +72,7 @@ public:
     void write_data_to_kconfig();
     void write_data_to_scons();
     void write_data_to_maincpp();
+    void write_data_to_mainscons();
     void get_date_info();
 
 private slots:

@@ -46,6 +46,7 @@ void Widget::load_data_to_dir()
     write_data_to_scons();
     write_data_to_kconfig();
     write_data_to_maincpp();
+    write_data_to_mainscons();
     QMessageBox::StandardButton result = QMessageBox::question( this,"成功","代码生成成功，是否打开资源所在目录？");
 
     if(result == QMessageBox::No)
@@ -178,7 +179,7 @@ void Widget::write_data_to_hfile()
 
 void Widget::write_data_to_kconfig()
 {
-    QFile kconfigfile(rttBspdirpath+"/applications/arduino_pinout/Kconfig");
+    QFile kconfigfile(rttBspdirpath+"/applications/Kconfig(Please copy)");
     if(!kconfigfile.open(QIODevice::WriteOnly | QIODevice::Text|QFile::Truncate))
     {
         return;
@@ -324,3 +325,29 @@ void Widget::write_data_to_maincpp()
     }
     out << "}\n";
 }
+
+void Widget::write_data_to_mainscons()
+{
+    QFile mainsconsfile(rttBspdirpath+"/applications/SConscript");
+    if(!mainsconsfile.open(QIODevice::WriteOnly | QIODevice::Text|QFile::Truncate))
+    {
+        return;
+    }
+
+    QTextStream out(&mainsconsfile);
+
+    out << "from building import *\n";
+    out << "import os\n\n";
+    out << "cwd     = GetCurrentDir()\n";
+    out << "CPPPATH = [cwd]\n";
+    out << "src = ['main.c']\n\n";
+    out << "if GetDepend(['PKG_USING_RTDUINO']) and not GetDepend(['RTDUINO_NO_SETUP_LOOP']):\n";
+    out << "    src += ['arduino_main.cpp']\n\n";
+    out << "group = DefineGroup('Applications', src, depend = [''], CPPPATH = CPPPATH)\n\n";
+    out << "list = os.listdir(cwd)\n";
+    out << "for item in list:\n";
+    out << "    if os.path.isfile(os.path.join(cwd, item, 'SConscript')):\n";
+    out << "        group = group + SConscript(os.path.join(item, 'SConscript'))\n\n";
+    out << "Return('group')\n";
+}
+
