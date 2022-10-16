@@ -1,6 +1,9 @@
 # 软件使用指南
 
-pinout-generator是为了方便用户将BSP对接到RTduino上而设计的一个自动化源文件生成工具。下面以 [stm32f103-blue-pill](https://github.com/RT-Thread/rt-thread/tree/master/bsp/stm32/stm32f103-blue-pill/applications/arduino_pinout) 为例，展示如何使用本软件，并将该BSP对接到RTduino上。
+pinout-generator是为了方便用户将BSP对接到[RTduino](https://github.com/RTduino/RTduino)上而设计的一个自动化源文件生成工具。下面以 [stm32f103-blue-pill](https://github.com/RT-Thread/rt-thread/tree/master/bsp/stm32/stm32f103-blue-pill/applications/arduino_pinout) 为例，展示如何使用本软件，并将该BSP对接到RTduino上。
+
+**参考资料：**
+- [RTduino对接文档](https://github.com/RTduino/RTduino/blob/master/README_zh.md#4-%E5%A6%82%E4%BD%95%E7%BB%99%E6%9F%90%E4%B8%AAbsp%E9%80%82%E9%85%8Drtduino)
 
 ## 1 如何对接
 
