@@ -4,7 +4,7 @@ pinout-generator是为了方便用户将BSP对接到[RTduino](https://github.com
 
 **参考资料：**
 - [RTduino对接文档](https://github.com/RTduino/RTduino/blob/master/README_zh.md#4-%E5%A6%82%E4%BD%95%E7%BB%99%E6%9F%90%E4%B8%AAbsp%E9%80%82%E9%85%8Drtduino)
-- [RTduino对接RT-Thread BSP教程](https://github.com/RTduino/RTduino/blob/master/docs/zh/RTduino%20BSP%E5%AF%B9%E6%8E%A5%E6%95%99%E7%A8%8B.md)
+- [RTduino对接RT-Thread BSP教程](https://github.com/RTduino/RTduino/blob/master/docs/zh/RTduino%E5%AF%B9%E6%8E%A5RT-Thread%20BSP%E6%95%99%E7%A8%8B.md)
 - [RTduino对接到RT-Thread BSP手把手教程（视频）](https://www.bilibili.com/video/BV1WG41177Cu)
 
 ## 1 如何对接
