@@ -258,16 +258,19 @@ void Widget::write_data_to_kconfig()
             break;
         }
     };
-    foreach(auto i,varlist)
+    if(!varlist.isEmpty())
     {
-        out << i;
+        foreach(auto i,varlist)
+        {
+            out << i;
+        }
+        if(varlist.at(pwmindex) == "    select BSP_USING_PWM\n")
+            out << "    imply RTDUINO_USING_SERVO\n";
+        if(ui->i2cdevbox->currentText() != "NULL")
+            out << "    imply RTDUINO_USING_WIRE\n";
+        if(ui->spidevbox->currentText() != "NULL")
+            out << "    imply RTDUINO_USING_SPI\n";
     }
-    if(varlist.at(pwmindex) == "    select BSP_USING_PWM\n")
-        out << "    imply RTDUINO_USING_SERVO\n";
-    if(ui->i2cdevbox->currentText() != "NULL")
-        out << "    imply RTDUINO_USING_WIRE\n";
-    if(ui->spidevbox->currentText() != "NULL")
-        out << "    imply RTDUINO_USING_SPI\n";
     out << "    default n";
 }
 
