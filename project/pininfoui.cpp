@@ -139,6 +139,7 @@ void PininfoUI::on_funcbox_currentIndexChanged(const QString &arg1)
     else if (arg1 == "ADC") {
         show_name_or_channel(true,true);
         show_pin_function(true);
+        ui->pinfuclabel->setText("通道功能");
         pinfunclist << "EXTVOL" << "INTVOL" << "INTTEP";
         ui->pinfucbox->addItems(pinfunclist);
         ui->devnameedit->setPlaceholderText("adc1");
