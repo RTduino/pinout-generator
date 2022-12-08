@@ -6,6 +6,8 @@ PininfoUI::PininfoUI(QWidget *parent) :
     ui(new Ui::PininfoUI)
 {
     ui->setupUi(this);
+    show_name_or_channel(false,false);
+    show_pin_function(false);
 }
 
 PininfoUI::~PininfoUI()
@@ -40,12 +42,29 @@ void PininfoUI::show_name_or_channel(bool nameshow, bool channelshow)
     ui->devnameedit->clear();
 }
 
+void PininfoUI::show_pin_function(bool pinshow)
+{
+    if(pinshow == true)
+    {
+        ui->pinfucbox->setVisible(true);
+        ui->pinfuclabel->setVisible(true);
+    }
+    else
+    {
+        ui->pinfucbox->setVisible(false);
+        ui->pinfuclabel->setVisible(false);
+    }
+    ui->pinfucbox->clear();
+    pinfunclist.clear();
+}
+
 void PininfoUI::show_change_ui_info(QStringList &list)
 {
     ui->funcbox->setCurrentText(list.at(2));
     ui->rttpinedit->setText(list.at(1));
     ui->devnameedit->setText(list.at(3));
     ui->channeledit->setText(list.at(4));
+    ui->pinfucbox->setCurrentText(list.at(5));
     ui->namelabel->setText("修改引脚");
     curpinstate = "change";
 }
@@ -81,6 +100,7 @@ void PininfoUI::on_addbtn_clicked()
     list << ui->rttpinedit->text();
     list << ui->devnameedit->text();
     list << ui->channeledit->text();
+    list << ui->pinfucbox->currentText();
     list << curpinstate;
 
     emit send_pininfo_data(list);
@@ -94,45 +114,62 @@ void PininfoUI::on_cancebtn_clicked()
 
 void PininfoUI::on_funcbox_currentIndexChanged(const QString &arg1)
 {
+
     if(arg1 == "GPIO")
     {
         show_name_or_channel(false,false);
+        show_pin_function(false);
         ui->devnameedit->setPlaceholderText("");
         ui->channeledit->setPlaceholderText("");
     }
     else if (arg1 == "UART") {
         show_name_or_channel(true,false);
+        show_pin_function(true);
+        pinfunclist << "TX" << "RX";
+        ui->pinfucbox->addItems(pinfunclist);
         ui->devnameedit->setPlaceholderText("uart1");
         ui->channeledit->setPlaceholderText("");
     }
     else if (arg1 == "PWM") {
         show_name_or_channel(true,true);
+        show_pin_function(false);
         ui->devnameedit->setPlaceholderText("pwm1");
         ui->channeledit->setPlaceholderText("2");
     }
     else if (arg1 == "ADC") {
         show_name_or_channel(true,true);
+        show_pin_function(true);
+        pinfunclist << "EXTVOL" << "INTVOL" << "INTTEP";
+        ui->pinfucbox->addItems(pinfunclist);
         ui->devnameedit->setPlaceholderText("adc1");
         ui->channeledit->setPlaceholderText("3");
     }
     else if (arg1 == "DAC") {
         show_name_or_channel(true,true);
+        show_pin_function(false);
         ui->devnameedit->setPlaceholderText("dac1");
         ui->channeledit->setPlaceholderText("1");
     }
     else if (arg1 == "SPI") {
         show_name_or_channel(true,false);
+        show_pin_function(true);
+        pinfunclist << "SCK" << "MISO" << "MOSI";
+        ui->pinfucbox->addItems(pinfunclist);
         ui->devnameedit->setPlaceholderText("spi2");
         ui->channeledit->setPlaceholderText("");
     }
     else if (arg1 == "I2C") {
         show_name_or_channel(true,false);
+        show_pin_function(true);
+        pinfunclist << "SCL" << "SDA";
+        ui->pinfucbox->addItems(pinfunclist);
         ui->devnameedit->setPlaceholderText("i2c1");
         ui->channeledit->setPlaceholderText("");
     }
     else /*USB*/
     {
         show_name_or_channel(true,false);
+        show_pin_function(false);
         ui->devnameedit->setPlaceholderText("usb");
         ui->channeledit->setPlaceholderText("");
     }
@@ -153,3 +190,14 @@ void PininfoUI::on_channeledit_returnPressed()
 {
     on_addbtn_clicked();
 }
+
+void PininfoUI::on_pinfucbox_currentIndexChanged(const QString &arg1)
+{
+    if(arg1 == "INTVOL" || arg1 == "INTTEP")
+    {
+        ui->rttpinedit->setText("RT_NULL");
+    }
+    else
+        ui->rttpinedit->clear();
+}
+

@@ -19,7 +19,7 @@
 "src = Glob('*.c') + Glob('*.cpp')\n"\
 "inc = [cwd]\n"\
 "\n"\
-"group = DefineGroup('Arduino', src, depend = ['PKG_USING_RTDUINO'], CPPPATH = inc)\n"\
+"group = DefineGroup('RTduino', src, depend = ['PKG_USING_RTDUINO'], CPPPATH = inc)\n"\
 "\n"\
 "Return('group')\n"
 #endif // FILEINFO_H

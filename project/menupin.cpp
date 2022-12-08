@@ -5,6 +5,7 @@ void Widget::on_recive_pininfo_data(QStringList &pininfo)
 {
     QString curardpin;
     int highlight;
+    qDebug() << pininfo;
     if(pininfo.last() == "add")
     {
         curardpin = pinmaplist.add_pinmap_info_to_list(pininfo);
@@ -146,10 +147,18 @@ void Widget::on_treeWidget_customContextMenuRequested(const QPoint &pos)
     /* 获取当前被点击的节点 */
     QTreeWidgetItem* curItem=ui->treeWidget->itemAt(pos);
     QStringList pininfo;
+
     if(curItem != NULL)
-        pininfo << curItem->text(0) << curItem->text(1) << curItem->text(2) << curItem->text(3) << curItem->text(4);
+    {
+        QRegularExpression tablereg("(.*) - (.*)");
+        QString devname = tablereg.match(curItem->text(3)).captured(1);
+        QString pinfunc = tablereg.match(curItem->text(3)).captured(2);
+        if(devname.isEmpty() && pinfunc.isEmpty())
+            devname = curItem->text(3);
+        pininfo << curItem->text(0) << curItem->text(1) << curItem->text(2) << devname << curItem->text(4) << pinfunc;
+    }
     else
-        pininfo << "" << "" << "" << "" << "";
+        pininfo << "" << "" << "" << "" << "" << "";
 
     /* 创建菜单 */
     QMenu *Menu = new QMenu(this);

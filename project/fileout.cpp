@@ -90,10 +90,16 @@ void Widget::write_data_to_cfile()
             pmap->io_notes = "/* SPI-SS */";
 
         if(pmap->io_name == ui->s2box->currentText())
-            pmap->io_notes = "/* Serial2-xx */";
+            pmap->io_notes = "/* Serial2-"+ pmap->pin_func +" */";
 
         if(pmap->io_name == ui->s3box->currentText())
-            pmap->io_notes = "/* Serial3-xx */";
+            pmap->io_notes = "/* Serial3-"+ pmap->pin_func +" */";
+
+        if(pmap->pin_func == "INTVOL")
+            pmap->io_notes = "/* ADC, On-Chip: internal reference voltage, ADC_CHANNEL_VREFINT */";
+
+        if(pmap->pin_func == "INTTEP")
+            pmap->io_notes = "/* ADC, On-Chip: internal temperature sensor, ADC_CHANNEL_TEMPSENSOR */";
 
         QString linestr = "    {";
         if(!pmap->arduino_pin.isEmpty())
@@ -148,12 +154,30 @@ void Widget::write_data_to_hfile()
     }
     if(!(ui->i2cdevbox->currentText() == "NULL"))
     {
-        out << "/* "+ui->i2cdevbox->currentText()+" : xxx-SDA xxx-SCL */\n";
+        QString pinscl = "xx",pinsda = "xx";
+        foreach(auto i,pinmaplist.Allpinlist)
+        {
+            if(i->io_name == ui->i2cdevbox->currentText() && i->pin_func == "SCL")
+                pinscl = i->rtthread_pin.mid(8,1)+i->rtthread_pin.mid(10,i->rtthread_pin.size()-11);
+            if(i->io_name == ui->i2cdevbox->currentText() && i->pin_func == "SDA")
+                pinsda = i->rtthread_pin.mid(8,1)+i->rtthread_pin.mid(10,i->rtthread_pin.size()-11);
+        }
+        out << "/* "+ui->i2cdevbox->currentText()+" : P"+pinsda+"-SDA P"+pinscl+"-SCL */\n";
         out << "#define RTDUINO_DEFAULT_IIC_BUS_NAME    \""+ui->i2cdevbox->currentText()+"\"\n\n";
     }
     if(!(ui->spidevbox->currentText() == "NULL"))
     {
-        out << "/* "+ui->spidevbox->currentText()+" : xxx-SCK  xxx-MISO  xxx-MOSI */\n";
+        QString pinsck = "xx",pinmiso = "xx",pinmosi = "xx";
+        foreach(auto i,pinmaplist.Allpinlist)
+        {
+            if(i->io_name == ui->spidevbox->currentText() && i->pin_func == "SCK")
+                pinsck = i->rtthread_pin.mid(8,1)+i->rtthread_pin.mid(10,i->rtthread_pin.size()-11);
+            if(i->io_name == ui->spidevbox->currentText() && i->pin_func == "MISO")
+                pinmiso = i->rtthread_pin.mid(8,1)+i->rtthread_pin.mid(10,i->rtthread_pin.size()-11);
+            if(i->io_name == ui->spidevbox->currentText() && i->pin_func == "MOSI")
+                pinmosi = i->rtthread_pin.mid(8,1)+i->rtthread_pin.mid(10,i->rtthread_pin.size()-11);
+        }
+        out << "/* "+ui->spidevbox->currentText()+" : P"+pinsck+"-SCK  P"+pinmiso+"-MISO  P"+pinmosi+"-MOSI */\n";
         if(!(ui->spissbox->currentText() == "NULL"))
         {
             out << "#define SS      "+ui->spissbox->currentText()+"  /* Chip select pin of default spi */\n";
@@ -162,12 +186,28 @@ void Widget::write_data_to_hfile()
     }
     if(!(ui->s2box->currentText() == "NULL"))
     {
-        out << "/* Serial2 : xxx-TX  xxx-RX */\n";
+        QString pintx = "xx",pinrx = "xx";
+        foreach(auto i,pinmaplist.Allpinlist)
+        {
+            if(i->io_name == ui->s2box->currentText() && i->pin_func == "TX")
+                pintx = i->rtthread_pin.mid(8,1)+i->rtthread_pin.mid(10,i->rtthread_pin.size()-11);
+            if(i->io_name == ui->s2box->currentText() && i->pin_func == "RX")
+                pinrx = i->rtthread_pin.mid(8,1)+i->rtthread_pin.mid(10,i->rtthread_pin.size()-11);
+        }
+        out << "/* Serial2 : P"+pintx+"-TX  P"+pinrx+"-RX */\n";
         out << "#define RTDUINO_SERIAL2_DEVICE_NAME      \""+ui->s2box->currentText()+"\"\n\n";
     }
     if(!(ui->s3box->currentText() == "NULL"))
     {
-        out << "/* Serial3 : xxx-TX  xxx-RX */\n";
+        QString pintx = "xx",pinrx = "xx";
+        foreach(auto i,pinmaplist.Allpinlist)
+        {
+            if(i->io_name == ui->s3box->currentText() && i->pin_func == "TX")
+                pintx = i->rtthread_pin.mid(8,1)+i->rtthread_pin.mid(10,i->rtthread_pin.size()-11);
+            if(i->io_name == ui->s3box->currentText() && i->pin_func == "RX")
+                pinrx = i->rtthread_pin.mid(8,1)+i->rtthread_pin.mid(10,i->rtthread_pin.size()-11);
+        }
+        out << "/* Serial3 : P"+pintx+"-TX  P"+pinrx+"-RX */\n";
         out << "#define RTDUINO_SERIAL3_DEVICE_NAME      \""+ui->s3box->currentText()+"\"\n\n";
     }
     if(!ui->timedit->text().isEmpty())
@@ -186,97 +226,229 @@ void Widget::write_data_to_kconfig()
     }
     QTextStream out(&kconfigfile);
     QStringList varlist;
-    out << "config BSP_USING_ARDUINO\n";
-    out << "    bool \"Compatible with Arduino Ecosystem (RTduino)\"\n";
-    out << "    select PKG_USING_RTDUINO\n";
-    out << "    select BSP_USING_STLINK_TO_USART\n";
-    if(!(ui->s2box->currentText() == "NULL"))
-        out << "    select BSP_USING_UART"+ui->s2box->currentText().mid(4,ui->s2box->currentText().size()-4)+"\n";
-    if(!(ui->s3box->currentText() == "NULL"))
-        out << "    select BSP_USING_UART"+ui->s3box->currentText().mid(4,ui->s3box->currentText().size()-4)+"\n";
 
-    out << "    select BSP_USING_GPIO\n";
+    out << "menu \"Onboard Peripheral Drivers\"\n\n";
+    out << "    config BSP_USING_ARDUINO\n";
+    out << "        bool \"Compatible with Arduino Ecosystem (RTduino)\"\n";
+    out << "        select PKG_USING_RTDUINO\n";
+    out << "        select BSP_USING_STLINK_TO_USART\n";
+    if(!(ui->s2box->currentText() == "NULL"))
+        out << "        select BSP_USING_UART"+ui->s2box->currentText().mid(4,ui->s2box->currentText().size()-4)+"\n";
+    if(!(ui->s3box->currentText() == "NULL"))
+        out << "        select BSP_USING_UART"+ui->s3box->currentText().mid(4,ui->s3box->currentText().size()-4)+"\n";
+
+    out << "        select BSP_USING_GPIO\n";
 
     if(!ui->timedit->text().isEmpty())
     {
-        out << "    select BSP_USING_TIM\n";
-        out << "    select BSP_USING_TIM"+ui->timedit->text().mid(5,ui->timedit->text().size()-5)+"\n";
+        out << "        select BSP_USING_TIM\n";
+        out << "        select BSP_USING_TIM"+ui->timedit->text().mid(5,ui->timedit->text().size()-5)+"\n";
     }
-    foreach(auto i,pinmaplist.Allpinlist)
+
+    if(!pinmaplist.adcpinlist.isEmpty())
+        out << "        select BSP_USING_ADC\n";
+    foreach(auto i,pinmaplist.adcpinlist)
     {
-        if(i->io_name.mid(0,3) == "adc")
+        out << "        select BSP_USING_ADC"+i->device_name.mid(3,i->device_name.size()-3)+"\n";
+    };
+
+    if(!pinmaplist.dacpinlist.isEmpty())
+        out << "        select BSP_USING_DAC\n";
+    foreach(auto i,pinmaplist.dacpinlist)
+    {
+        out << "        select BSP_USING_DAC"+i->device_name.mid(3,i->device_name.size()-3)+"\n";
+    };
+
+    if(!pinmaplist.pwmpinlist.isEmpty())
+        out << "        select BSP_USING_PWM\n";
+    foreach(auto i,pinmaplist.pwmpinlist)
+    {
+        out << "        select BSP_USING_PWM"+i->device_name.mid(3,i->device_name.size()-3)+"\n";
+        foreach(auto c,i->device_channels)
         {
-            varlist.removeOne("    select BSP_USING_ADC\n");
-            varlist.append("    select BSP_USING_ADC\n");
-            varlist.removeOne("    select BSP_USING_ADC"+i->io_name.mid(3,i->io_name.size()-3)+"\n");
-            varlist.append("    select BSP_USING_ADC"+i->io_name.mid(3,i->io_name.size()-3)+"\n");
+            out << "        select BSP_USING_PWM"+i->device_name.mid(3,i->device_name.size()-3)+"_CH"+c+"\n";
         }
     };
-    foreach(auto i,pinmaplist.Allpinlist)
+
+    if(!pinmaplist.i2cpinlist.isEmpty())
+        out << "        select BSP_USING_I2C\n";
+    foreach(auto i,pinmaplist.i2cpinlist)
     {
-        if(i->io_name.mid(0,3) == "dac")
-        {
-            varlist.removeOne("    select BSP_USING_DAC\n");
-            varlist.append("    select BSP_USING_DAC\n");
-            varlist.removeOne("    select BSP_USING_DAC"+i->io_name.mid(3,i->io_name.size()-3)+"\n");
-            varlist.append("    select BSP_USING_DAC"+i->io_name.mid(3,i->io_name.size()-3)+"\n");
-        }
+        out << "        select BSP_USING_I2C"+i->device_name.mid(3,i->device_name.size()-3)+"\n";
     };
-    int pwmindex = varlist.size();
-    foreach(auto i,pinmaplist.Allpinlist)
+
+    if(!pinmaplist.spipinlist.isEmpty())
+        out << "        select BSP_USING_SPI\n";
+    foreach(auto i,pinmaplist.spipinlist)
     {
-        if(i->io_name.mid(0,3) == "pwm")
-        {
-            int abschannel =qAbs(i->io_channel.toInt());
-            varlist.removeOne("    select BSP_USING_PWM\n");
-            varlist.insert(pwmindex,"    select BSP_USING_PWM\n");
-            varlist.removeOne("    select BSP_USING_PWM"+i->io_name.mid(3,i->io_name.size()-3)+"\n");
-            varlist.insert(pwmindex+1,"    select BSP_USING_PWM"+i->io_name.mid(3,i->io_name.size()-3)+"\n");
-            varlist.removeOne("    select BSP_USING_PWM"+i->io_name.mid(3,i->io_name.size()-3)+"_CH"+QString::number(abschannel)+"\n");
-            varlist.append("    select BSP_USING_PWM"+i->io_name.mid(3,i->io_name.size()-3)+"_CH"+QString::number(abschannel)+"\n");
-        }
+        out << "        select BSP_USING_SPI"+i->device_name.mid(3,i->device_name.size()-3)+"\n";
     };
-    foreach(auto i,pinmaplist.Allpinlist)
+
+    if(!pinmaplist.pwmpinlist.isEmpty())
+        out << "        imply RTDUINO_USING_SERVO\n";
+    if(ui->i2cdevbox->currentText() != "NULL")
+        out << "        imply RTDUINO_USING_WIRE\n";
+    if(ui->spidevbox->currentText() != "NULL")
+        out << "        imply RTDUINO_USING_SPI\n";
+    out << "        default n\n\n";
+    out << "endmenu\n\n";
+//---------------------------------------------------------
+    if(!(ui->s2box->currentText() == "NULL") || !(ui->s3box->currentText() == "NULL"))
     {
-        if(i->io_name.mid(0,3) == "i2c")
-        {
-            varlist.removeOne("    select BSP_USING_I2C\n");
-            varlist.append("    select BSP_USING_I2C\n");
-            varlist.removeOne("    select BSP_USING_I2C"+i->io_name.mid(3,i->io_name.size()-3)+"\n");
-            varlist.append("    select BSP_USING_I2C"+i->io_name.mid(3,i->io_name.size()-3)+"\n");
-            break;
-        }
-    };
-    foreach(auto i,pinmaplist.Allpinlist)
-    {
-        if(i->io_name.mid(0,3) == "spi")
-        {
-            varlist.removeOne("    select BSP_USING_SPI\n");
-            varlist.append("    select BSP_USING_SPI\n");
-            varlist.removeOne("    select BSP_USING_SPI"+i->io_name.mid(3,i->io_name.size()-3)+"\n");
-            varlist.append("    select BSP_USING_SPI"+i->io_name.mid(3,i->io_name.size()-3)+"\n");
-            break;
-        }
-    };
-    if(!varlist.isEmpty())
-    {
-        foreach(auto i,varlist)
-        {
-            out << i;
-        }
-        if(varlist.at(pwmindex) == "    select BSP_USING_PWM\n")
-            out << "    imply RTDUINO_USING_SERVO\n";
-        if(ui->i2cdevbox->currentText() != "NULL")
-            out << "    imply RTDUINO_USING_WIRE\n";
-        if(ui->spidevbox->currentText() != "NULL")
-            out << "    imply RTDUINO_USING_SPI\n";
+        out << "menu \"On-chip Peripheral Drivers\"\n\n";
+        out << "    menuconfig BSP_USING_UART\n";
+        out << "        bool \"Enable UART\"\n";
+        out << "        default y\n";
+        out << "        select RT_USING_SERIAL\n";
+        out << "        if BSP_USING_UART\n";
     }
-    out << "    default n";
+
+    if(!(ui->s2box->currentText() == "NULL"))
+    {
+        out << "            config BSP_USING_UART"+ui->s2box->currentText().mid(4,ui->s2box->currentText().size()-4)+"\n";
+        out << "                bool \"Enable UART"+ui->s2box->currentText().mid(4,ui->s2box->currentText().size()-4)+"\"\n";
+        out << "                default n\n";
+    }
+    if(!(ui->s3box->currentText() == "NULL"))
+    {
+        out << "            config BSP_USING_UART"+ui->s3box->currentText().mid(4,ui->s3box->currentText().size()-4)+"\n";
+        out << "                bool \"Enable UART"+ui->s3box->currentText().mid(4,ui->s3box->currentText().size()-4)+"\"\n";
+        out << "                default n\n";
+    }
+    if(!(ui->s2box->currentText() == "NULL") || !(ui->s3box->currentText() == "NULL"))
+        out << "        endif\n\n";
+
+    if(!ui->timedit->text().isEmpty())
+    {
+        out << "    menuconfig BSP_USING_TIM\n";
+        out << "        bool \"Enable timer\"\n";
+        out << "        default n\n";
+        out << "        select RT_USING_HWTIMER\n";
+        out << "        if BSP_USING_TIM\n";
+        out << "            config BSP_USING_TIM"+ui->timedit->text().mid(5,ui->timedit->text().size()-5)+"\n";
+        out << "            bool \"Enable TIM"+ui->timedit->text().mid(5,ui->timedit->text().size()-5)+"\"\n";
+        out << "                default n\n";
+        out << "        endif\n\n";
+    }
+    if(!pinmaplist.adcpinlist.isEmpty())
+    {
+        out << "    menuconfig BSP_USING_ADC\n";
+        out << "        bool \"Enable ADC\"\n";
+        out << "        default n\n";
+        out << "        select RT_USING_ADC\n";
+        out << "        if BSP_USING_ADC\n";
+        foreach(auto i,pinmaplist.adcpinlist)
+        {
+            out << "            config BSP_USING_ADC"+i->device_name.mid(3,i->device_name.size()-3)+"\n";
+            out << "                bool \"Enable ADC"+i->device_name.mid(3,i->device_name.size()-3)+"\"\n";
+            out << "                default n\n";
+        };
+        out << "        endif\n\n";
+    }
+
+
+    if(!pinmaplist.dacpinlist.isEmpty())
+    {
+        out << "    menuconfig BSP_USING_DAC\n";
+        out << "        bool \"Enable DAC\"\n";
+        out << "        default n\n";
+        out << "        select RT_USING_DAC\n";
+        out << "        if BSP_USING_DAC\n";
+        foreach(auto i,pinmaplist.dacpinlist)
+        {
+            out << "            config BSP_USING_DAC"+i->device_name.mid(3,i->device_name.size()-3)+"\n";
+            out << "                bool \"Enable DAC"+i->device_name.mid(3,i->device_name.size()-3)+"\"\n";
+            out << "                default n\n";
+        };
+        out << "        endif\n\n";
+    }
+
+
+    if(!pinmaplist.pwmpinlist.isEmpty())
+    {
+        out << "    menuconfig BSP_USING_PWM\n";
+        out << "        bool \"Enable PWM\"\n";
+        out << "        default n\n";
+        out << "        select RT_USING_PWM\n";
+        out << "        if BSP_USING_PWM\n";
+        foreach(auto i,pinmaplist.pwmpinlist)
+        {
+            out << "        menuconfig BSP_USING_PWM"+i->device_name.mid(3,i->device_name.size()-3)+"\n";
+            out << "            bool \"Enable timer"+i->device_name.mid(3,i->device_name.size()-3)+" output PWM\"\n";
+            out << "            default n\n";
+            out << "            if BSP_USING_PWM"+i->device_name.mid(3,i->device_name.size()-3)+"\n";
+            foreach(auto c,i->device_channels)
+            {
+                out << "                config BSP_USING_PWM"+i->device_name.mid(3,i->device_name.size()-3)+"_CH"+c+"\n";
+                out << "                    bool \"Enable PWM"+i->device_name.mid(3,i->device_name.size()-3)+" channel"+c+"\"\n";
+                out << "                    default n\n";
+
+            }
+            out << "            endif\n\n";
+        };
+        out << "        endif\n\n";
+    }
+
+
+    if(!pinmaplist.spipinlist.isEmpty())
+    {
+        out << "    menuconfig BSP_USING_SPI\n";
+        out << "        bool \"Enable SPI BUS\"\n";
+        out << "        default n\n";
+        out << "        select RT_USING_SPI\n";
+        out << "        if BSP_USING_SPI\n";
+        foreach(auto i,pinmaplist.spipinlist)
+        {
+            out << "            config BSP_USING_SPI"+i->device_name.mid(3,i->device_name.size()-3)+"\n";
+            out << "                bool \"Enable SPI"+i->device_name.mid(3,i->device_name.size()-3)+" BUS\"\n";
+            out << "                default n\n";
+        };
+        out << "        endif\n\n";
+    }
+//    qDebug()<<pinmaplist.count_num_by_rttpin("B1");
+    int pinscl = -1,pinsda = -1;
+    QString pinsclstr = "xx",pinsdastr = "xx";
+    foreach(auto i,pinmaplist.Allpinlist)
+    {
+        if(i->io_name == ui->i2cdevbox->currentText() && i->pin_func == "SCL")
+        {
+            pinsclstr = i->rtthread_pin.mid(8,1)+i->rtthread_pin.mid(10,i->rtthread_pin.size()-11);
+            pinscl = pinmaplist.count_num_by_rttpin(pinsclstr);
+        }
+
+        if(i->io_name == ui->i2cdevbox->currentText() && i->pin_func == "SDA")
+        {
+            pinsdastr = i->rtthread_pin.mid(8,1)+i->rtthread_pin.mid(10,i->rtthread_pin.size()-11);
+            pinsda = pinmaplist.count_num_by_rttpin(pinsdastr);
+        }
+    }
+
+    if(!pinmaplist.i2cpinlist.isEmpty())
+    {
+        out << "    menuconfig BSP_USING_I2C1\n";
+        out << "        bool \"Enable I2C1 BUS (software simulation)\"\n";
+        out << "        default n\n";
+        out << "        select RT_USING_I2C\n";
+        out << "        select RT_USING_I2C_BITOPS\n";
+        out << "        select RT_USING_PIN\n";
+        out << "        if BSP_USING_I2C1\n";
+        foreach(auto i,pinmaplist.i2cpinlist)
+        {
+            out << "            config BSP_I2C"+i->device_name.mid(3,i->device_name.size()-3)+"_SCL_PIN\n";
+            out << "                int \"i2c"+i->device_name.mid(3,i->device_name.size()-3)+" scl pin number (P"+pinsclstr+")\"\n";
+            out << "                default "+QString::number(pinscl)+"\n";
+            out << "            config BSP_I2C"+i->device_name.mid(3,i->device_name.size()-3)+"_SDA_PIN\n";
+            out << "                int \"i2c"+i->device_name.mid(3,i->device_name.size()-3)+" sda pin number (P"+pinsdastr+")\"\n";
+            out << "                default "+QString::number(pinsda)+"\n";
+        };
+        out << "        endif\n\n";
+    }
+    out << "endmenu\n";
 }
 
 void Widget::write_data_to_scons()
 {
-    QFile sconsfile(rttBspdirpath+"/applications/arduino_pinout/Sconscript");
+    QFile sconsfile(rttBspdirpath+"/applications/arduino_pinout/SConscript");
     if(!sconsfile.open(QIODevice::WriteOnly | QIODevice::Text|QFile::Truncate))
     {
         return;
@@ -343,7 +515,7 @@ void Widget::write_data_to_mainscons()
     out << "import os\n\n";
     out << "cwd     = GetCurrentDir()\n";
     out << "CPPPATH = [cwd]\n";
-    out << "src = ['main.c']\n\n";
+    out << "src     = Glob('*.c')\n\n";
     out << "if GetDepend(['PKG_USING_RTDUINO']) and not GetDepend(['RTDUINO_NO_SETUP_LOOP']):\n";
     out << "    src += ['arduino_main.cpp']\n\n";
     out << "group = DefineGroup('Applications', src, depend = [''], CPPPATH = CPPPATH)\n\n";

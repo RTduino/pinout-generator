@@ -16,8 +16,9 @@ class PininfoUI : public QWidget
 public:
     explicit PininfoUI(QWidget *parent = nullptr);
     ~PininfoUI();
-
+    QStringList pinfunclist;
     void show_name_or_channel(bool nameshow,bool channelshow);
+    void show_pin_function(bool pinshow);
     void show_change_ui_info(QStringList &list);
     void show_insert_ui_info();
     void show_add_ui_info();
@@ -34,6 +35,8 @@ private slots:
     void on_devnameedit_returnPressed();
 
     void on_channeledit_returnPressed();
+
+    void on_pinfucbox_currentIndexChanged(const QString &arg1);
 
 private:
     Ui::PininfoUI *ui;

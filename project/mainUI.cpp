@@ -30,7 +30,10 @@ void Widget::table_add_item(Pinmap &pin)
     item->setText(0,pin.arduino_pin);
     item->setText(1,pin.rtthread_pin);
     item->setText(2,pin.io_function);
-    item->setText(3,pin.io_name);
+    if(!pin.pin_func.isEmpty())
+        item->setText(3,pin.io_name+" - "+pin.pin_func);
+    else
+        item->setText(3,pin.io_name);
     item->setText(4,pin.io_channel);
 
     ui->treeWidget->addTopLevelItem(item);

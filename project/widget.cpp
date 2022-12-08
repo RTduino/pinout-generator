@@ -98,6 +98,12 @@ void Widget::on_exportbtn_clicked()
     }
     all_ui_component_refresh();
     pinmaplist.update_pinmap_notes();
+    pinmaplist.update_uartpinlist();
+    pinmaplist.update_pwmpinlist();
+    pinmaplist.update_adcpinlist();
+    pinmaplist.update_dacpinlist();
+    pinmaplist.update_spipinlist();
+    pinmaplist.update_i2cpinlist();
     load_data_to_dir();
 }
 
@@ -130,7 +136,13 @@ void Widget::on_autor_linkActivated(const QString &link)
 void Widget::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item, int column)
 {
     QStringList pininfo;
-    pininfo << item->text(0) << item->text(1) << item->text(2) << item->text(3) << item->text(4) << "chg";
+    QRegularExpression tablereg("(.*) - (.*)");
+    QString devname = tablereg.match(item->text(3)).captured(1);
+    QString pinfunc = tablereg.match(item->text(3)).captured(2);
+    if(devname.isEmpty() && pinfunc.isEmpty())
+        devname = item->text(3);
+    pininfo << item->text(0) << item->text(1) << item->text(2) << devname << item->text(4) << pinfunc << "chg";
+    qDebug() << pininfo;
     menu_change_event(pininfo);
     pinUI->show();
 }

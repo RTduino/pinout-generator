@@ -14,6 +14,7 @@ void Widget::prase_pin_item_from_string(QString &pinline)
     QRegularExpression rttpinreg("([ADC]{1,3}\\d+),[ ]?.*?(GET_PIN.*?\\)|\\d+)?[,} ]");
     QRegularExpression namereg("\"(.*)\"");
     QRegularExpression channelreg("[ ,](-?\\d+)[ }]");
+    QRegularExpression pinfuncreg("-(.*? )");
 
     pmap->arduino_pin =  arduinoreg.match(pinline).captured(1);
     pmap->io_channel = channelreg.match(pinline).captured(1);
@@ -22,7 +23,17 @@ void Widget::prase_pin_item_from_string(QString &pinline)
         pmap->rtthread_pin = "RT_NULL";
     else
         pmap->rtthread_pin = rttpinreg.match(pinline).captured(2);
-
+//    qDebug() << pinfuncreg.match(pinline).captured(1).mid(0,pinfuncreg.match(pinline).captured(1).size()-1);
+    if(pinfuncreg.match(pinline).captured(1).mid(0,pinfuncreg.match(pinline).captured(1).size()-1) != "SS")
+        pmap->pin_func = pinfuncreg.match(pinline).captured(1).mid(0,pinfuncreg.match(pinline).captured(1).size()-1);
+    if(pinline.contains("ADC",Qt::CaseSensitive))
+    {
+        pmap->pin_func = "EXTVOL";
+        if(pinline.contains("voltage",Qt::CaseSensitive))
+            pmap->pin_func = "INTVOL";
+        if(pinline.contains("temperature",Qt::CaseSensitive))
+            pmap->pin_func = "INTTEP";
+    }
     pin_set_io_function(pmap);
     pinmaplist.fill_pinmap_notes(pmap);
     pinmaplist.Allpinlist.push_back(pmap);
