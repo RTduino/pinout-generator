@@ -47,6 +47,7 @@ void Widget::load_data_to_dir()
     write_data_to_kconfig();
     write_data_to_maincpp();
     write_data_to_mainscons();
+    write_data_to_readme();
     QMessageBox::StandardButton result = QMessageBox::question( this,"成功","代码生成成功，是否打开资源所在目录？");
 
     if(result == QMessageBox::No)
@@ -94,6 +95,9 @@ void Widget::write_data_to_cfile()
 
         if(pmap->io_name == ui->s3box->currentText())
             pmap->io_notes = "/* Serial3-"+ pmap->pin_func +" */";
+
+        if(pmap->io_name == "usb")
+            pmap->io_notes = "/* SerialUSB-"+ pmap->pin_func +" */";
 
         if(pmap->pin_func == "INTVOL")
             pmap->io_notes = "/* ADC, On-Chip: internal reference voltage, ADC_CHANNEL_VREFINT */";
@@ -525,4 +529,93 @@ void Widget::write_data_to_mainscons()
     out << "        group = group + SConscript(os.path.join(item, 'SConscript'))\n\n";
     out << "Return('group')\n";
 }
+
+void Widget::write_data_to_readme()
+{
+    QString index,ardpin,rttpin,vol53,note;
+    QFile readmefile(rttBspdirpath+"/applications/arduino_pinout/README.md");
+    if(!readmefile.open(QIODevice::WriteOnly | QIODevice::Text|QFile::Truncate))
+    {
+        return;
+    }
+
+    QTextStream out(&readmefile);
+    out.setCodec("UTF-8");
+
+    out << tr("# xxx 开发板的Arduino生态兼容说明\n\n");
+    out << tr("## 1 RTduino - RT-Thread的Arduino生态兼容层\n\n");
+    out << tr("xxx 开发板已经完整适配了[RTduino软件包](https://github.com/RTduino/RTduino)，即RT-Thread的Arduino"\
+            "生态兼容层。用户可以按照Arduino的编程习惯来操作该BSP，并且可以使用大量Arduino社区丰富的库，是"\
+            "对RT-Thread生态的极大增强。更多信息，请参见[RTduino软件包说明文档](https://github.com/RTduino/RTduino)。\n\n");
+    out << tr("### 1.1 如何开启针对本BSP的Arduino生态兼容层\n\n");
+    out << tr("Env 工具下敲入 menuconfig 命令，或者 RT-Thread Studio IDE 下选择 RT-Thread Settings：\n\n");
+    out << tr("```Kconfig\n");
+    out << tr("Hardware Drivers Config --->\n");
+    out << tr("    Onboard Peripheral Drivers --->\n");
+    out << tr("        [*] Compatible with Arduino Ecosystem (RTduino)\n");
+    out << tr("```\n\n");
+    out << tr("## 2 Arduino引脚排布\n\n");
+    out << tr("更多引脚布局相关信息参见 [pins_arduino.c](pins_arduino.c) 和 [pins_arduino.h](pins_arduino.h)。\n\n");
+    out << tr("![xxx-pinout](xxx-pinout.jpg)\n");
+    out << tr("| Arduino引脚编号  | STM32引脚编号 | 5V容忍 | 备注  |\n");
+    out << tr("| ------------------- | --------- | ---- | ------------------------------------------------------------------------- |\n");
+    foreach(auto pmap , pinmaplist.Allpinlist)
+    {
+        index = QString::number(pinmaplist.Allpinlist.indexOf(pmap));
+        ardpin = pmap->arduino_pin;
+        if(pmap->rtthread_pin == "RT_NULL")
+            rttpin = "--";
+        else
+            rttpin = "P" + pmap->rtthread_pin.mid(8,1)+pmap->rtthread_pin.mid(10,pmap->rtthread_pin.size()-11);
+
+        if(pmap->pin_func == "INTVOL")
+            vol53 = "";
+        else if(pmap->pin_func == "INTTEP")
+            vol53 = "";
+        else
+            vol53 = "是/否";
+
+        if(pmap->io_name.mid(0,3) == "pwm")
+            note = pmap->io_name.toUpper()+"-CH"+QString::number(pmap->io_channel.toInt())+"，默认被RT-Thread的PWM设备框架"+pmap->io_name+"接管";
+        else if(pmap->io_name.mid(0,3) == "adc")
+        {
+            if(pmap->pin_func == "INTVOL")
+                note = "芯片内部参考电压 ADC，默认被RT-Thread的ADC设备框架adc1接管";
+            else if(pmap->pin_func == "INTTEP")
+                note = "芯片内部温度 ADC，默认被RT-Thread的ADC设备框架adc1接管";
+            else
+                note = pmap->io_name.toUpper()+"-CH"+QString::number(pmap->io_channel.toInt())+"，默认被RT-Thread的ADC设备框架"+pmap->io_name+"接管";
+        }
+        else if(pmap->io_name.mid(0,3) == "dac")
+            note = pmap->io_name.toUpper()+"-CH"+QString::number(pmap->io_channel.toInt())+"，默认被RT-Thread的DAC设备框架"+pmap->io_name+"接管";
+        else if(pmap->io_name.mid(0,3) == "i2c")
+            note = pmap->io_name.toUpper()+"-"+pmap->pin_func+"，默认被RT-Thread的I2C设备框架"+pmap->io_name+"接管";
+        else if(pmap->io_name.mid(0,3) == "spi")
+            note = pmap->io_name.toUpper()+"-"+pmap->pin_func+"，默认被RT-Thread的SPI设备框架"+pmap->io_name+"接管";
+        else if(pmap->io_name.mid(0,3) == "usb")
+            note = pmap->io_name.toUpper()+"-"+pmap->pin_func+"，默认被 [TinyUSB软件包](https://github.com/RT-Thread-packages/tinyusb) 接管";
+        else if(pmap->io_name.mid(0,4) == "uart")
+        {
+            if(pmap->io_name == ui->s2box->currentText())
+                note = "Serial2-"+pmap->pin_func+"，默认被RT-Thread的UART设备框架"+pmap->io_name+"接管";
+            else if(pmap->io_name == ui->s3box->currentText())
+                note = "Serial3-"+pmap->pin_func+"，默认被RT-Thread的UART设备框架"+pmap->io_name+"接管";
+            else
+                note = "Serial-"+pmap->pin_func+"，默认被RT-Thread的UART设备框架"+pmap->io_name+"接管";
+        }
+        else if(pmap->arduino_pin == ui->spissbox->currentText())
+            note = "SPI片选默认引脚";
+        else if(pmap->arduino_pin == ui->ledbox->currentText())
+            note = "板载用户LED";
+        else
+            note = "";
+        out << "| " +index+" ("+ardpin+ ") | " +rttpin+ " | " +vol53+ " | " +note+ " |\n" ;
+    }
+    out << tr("\n");
+    out << tr("> 注意：\n");
+    out << tr(">\n");
+    out << tr("> 1. xxxxxxxxx\n");
+    out << tr("> 2. xxxxxxxxx\n");
+}
+
 

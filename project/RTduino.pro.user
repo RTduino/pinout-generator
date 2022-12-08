@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 6.0.2, 2022-12-04T10:52:07. -->
+<!-- Written by QtCreator 6.0.2, 2022-12-08T14:03:08. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -238,8 +238,9 @@
     <valuelist type="QVariantList" key="CustomOutputParsers"/>
     <value type="int" key="PE.EnvironmentAspect.Base">2</value>
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:/home/liyony/Desktop/QTcode/pinout-generator-qt/RTduino.pro</value>
-    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">/home/liyony/Desktop/QTcode/pinout-generator-qt/RTduino.pro</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">RTduino2</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:/home/liyony/Desktop/QTcode/project/RTduino.pro</value>
+    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">/home/liyony/Desktop/QTcode/project/RTduino.pro</value>
     <value type="bool" key="RunConfiguration.UseCppDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
     <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>

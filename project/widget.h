@@ -73,6 +73,7 @@ public:
     void write_data_to_scons();
     void write_data_to_maincpp();
     void write_data_to_mainscons();
+    void write_data_to_readme();
     void get_date_info();
 
 private slots:

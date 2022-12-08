@@ -25,7 +25,7 @@ void Widget::prase_pin_item_from_string(QString &pinline)
         pmap->rtthread_pin = rttpinreg.match(pinline).captured(2);
 //    qDebug() << pinfuncreg.match(pinline).captured(1).mid(0,pinfuncreg.match(pinline).captured(1).size()-1);
     if(pinfuncreg.match(pinline).captured(1).mid(0,pinfuncreg.match(pinline).captured(1).size()-1) != "SS")
-        pmap->pin_func = pinfuncreg.match(pinline).captured(1).mid(0,pinfuncreg.match(pinline).captured(1).size()-1);
+        pmap->pin_func = pinfuncreg.match(pinline).captured(1).mid(0,pinfuncreg.match(pinline).captured(1).size()-1).toUpper();
     if(pinline.contains("ADC",Qt::CaseSensitive))
     {
         pmap->pin_func = "EXTVOL";

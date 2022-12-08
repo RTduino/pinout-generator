@@ -171,6 +171,9 @@ void PininfoUI::on_funcbox_currentIndexChanged(const QString &arg1)
     {
         show_name_or_channel(true,false);
         show_pin_function(false);
+        show_pin_function(true);
+        pinfunclist << "DP" << "DM";
+        ui->pinfucbox->addItems(pinfunclist);
         ui->devnameedit->setPlaceholderText("usb");
         ui->channeledit->setPlaceholderText("");
     }
