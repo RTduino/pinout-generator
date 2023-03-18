@@ -486,6 +486,7 @@ void Widget::write_data_to_maincpp()
     else
     {
         out << "    Serial.begin();\n";
+        out << "    Serial.println(\"Hello RTduino!\");\n";
     }
 
     out << "}\n\n";
@@ -499,8 +500,7 @@ void Widget::write_data_to_maincpp()
     }
     else
     {
-        out << "    Serial.println(\"Hello Arduino!\");\n";
-        out << "    delay(800);\n";
+        out << "    delay(1000);\n";
     }
     out << "}\n";
 }
