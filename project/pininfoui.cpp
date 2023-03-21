@@ -61,10 +61,10 @@ void PininfoUI::show_pin_function(bool pinshow)
 void PininfoUI::show_change_ui_info(QStringList &list)
 {
     ui->funcbox->setCurrentText(list.at(2));
+    ui->pinfucbox->setCurrentText(list.at(5));
     ui->rttpinedit->setText(list.at(1));
     ui->devnameedit->setText(list.at(3));
     ui->channeledit->setText(list.at(4));
-    ui->pinfucbox->setCurrentText(list.at(5));
     ui->namelabel->setText("修改引脚");
     curpinstate = "change";
 }
@@ -201,7 +201,7 @@ void PininfoUI::on_pinfucbox_currentIndexChanged(const QString &arg1)
     {
         ui->rttpinedit->setText("RT_NULL");
     }
-    else
-        ui->rttpinedit->clear();
+//    else
+//        ui->rttpinedit->clear();
 }
 
