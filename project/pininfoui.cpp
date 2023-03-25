@@ -100,7 +100,10 @@ void PininfoUI::on_addbtn_clicked()
     list << ui->rttpinedit->text();
     list << ui->devnameedit->text();
     list << ui->channeledit->text();
-    list << ui->pinfucbox->currentText();
+    if(ui->funcbox->currentText() == "ADC")
+        list << ui->pinfucbox->currentText().mid(0,6);
+    else
+        list << ui->pinfucbox->currentText();
     list << curpinstate;
 
     emit send_pininfo_data(list);
@@ -114,7 +117,7 @@ void PininfoUI::on_cancebtn_clicked()
 
 void PininfoUI::on_funcbox_currentIndexChanged(const QString &arg1)
 {
-
+    ui->pinfuclabel->setText("引脚功能");
     if(arg1 == "GPIO")
     {
         show_name_or_channel(false,false);
@@ -140,7 +143,7 @@ void PininfoUI::on_funcbox_currentIndexChanged(const QString &arg1)
         show_name_or_channel(true,true);
         show_pin_function(true);
         ui->pinfuclabel->setText("通道功能");
-        pinfunclist << "EXTVOL" << "INTVOL" << "INTTEP";
+        pinfunclist << "EXTVOL(外部电压)" << "INTVOL(内部电压)" << "INTTEP(内部温度)";
         ui->pinfucbox->addItems(pinfunclist);
         ui->devnameedit->setPlaceholderText("adc1");
         ui->channeledit->setPlaceholderText("3");
