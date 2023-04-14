@@ -65,7 +65,7 @@ public:
     void load_data_from_dir();
     void prase_pin_item_from_string(QString &pinline);
     void pin_set_io_function(Pinmap *pinmap);
-
+    bool chack_data_is_valid();
     void  load_data_to_dir();
     void write_data_to_cfile();
     void write_data_to_hfile();

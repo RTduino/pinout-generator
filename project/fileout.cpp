@@ -15,6 +15,28 @@ void Widget::get_date_info()
         dateinfo->autor = "     "+ui->autoredit->text()+QString("%1").arg("first version", 13+13-ui->autoredit->text().size(), QLatin1Char(' '));
 }
 
+bool Widget::chack_data_is_valid()
+{
+    bool result = true;
+    QString error_info;
+    foreach(auto pmap , pinmaplist.Allpinlist)
+    {
+        if(pmap->io_function == "DAC" || pmap->io_function == "PWM" || pmap->io_function == "GPIO")
+            continue;
+        if(pmap->pin_func.isEmpty())
+        {
+            error_info += (pmap->arduino_pin + "(" +pmap->io_name + "),");
+            result = false;
+        }
+    }
+    if(result == false)
+    {
+        QMessageBox::warning(this,"警告",error_info.mid(0,error_info.size()-1) + \
+                             " 引脚的功能配置缺失，若不完善配置可能会出现一些问题(比如注释信息不完整)，但不会影响代码生成！");
+    }
+    return result;
+}
+
 void Widget::load_data_to_dir()
 {
     if(ui->fcpuedit->text().isEmpty())
@@ -38,6 +60,14 @@ void Widget::load_data_to_dir()
         {
             QString errinfo ="创建 "+rttBspdirpath+"/applications/arduino_pinout 文件夹失败！";
             QMessageBox::critical(this,"错误",errinfo);
+        }
+    }
+    if(!chack_data_is_valid())
+    {
+        QMessageBox::StandardButton check_ret = QMessageBox::question( this,"提示","不完善引脚配置，继续导出代码？");
+        if(check_ret == QMessageBox::No)
+        {
+            return;
         }
     }
     get_date_info();
@@ -112,12 +142,23 @@ void Widget::write_data_to_cfile()
             linestr += ", "+pmap->rtthread_pin;
         if(!pmap->io_name.isEmpty())
             linestr += ", \""+pmap->io_name+"\"";
-        if(!pmap->io_channel.isEmpty())
-            linestr += ", "+pmap->io_channel;
+        if(pmap->pin_func == "INTVOL")
+        {
+            linestr += ", RT_ADC_INTERN_CH_VREF";
+        }
+        else if(pmap->pin_func == "INTTEP")
+        {
+            linestr += ", RT_ADC_INTERN_CH_TEMPER";
+        }
+        else
+        {
+            if(!pmap->io_channel.isEmpty())
+                linestr += ", "+pmap->io_channel;
+        }
         linestr += "},";
         if(!pmap->io_notes.isEmpty())
         {
-            linestr +=QString("%1").arg(' ', 40-linestr.size(), QLatin1Char(' '));
+            linestr +=QString("%1").arg(' ', 55-linestr.size(), QLatin1Char(' '));
             linestr +=pmap->io_notes;
         }
         linestr += "\n";
