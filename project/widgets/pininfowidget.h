@@ -2,8 +2,7 @@
 #define PININFOWIDGET_H
 
 #include <QWidget>
-#include <QString>
-#include "pinsmap.h"
+#include <rtduinoconfig.h>
 
 namespace Ui {
 class PinInfoWidget;
@@ -17,24 +16,26 @@ public:
     explicit PinInfoWidget(QWidget *parent = nullptr);
     ~PinInfoWidget();
 
-    void initInfoUi(QString type);
-    void uiRefresh(QString devFunc);
-    void uiChangeRefresh();
-
-signals:
-
-    void refreshTreeWidget(void);
-
+    void initaddWidget(void);
+    void initinsertWidget(pin_info_t sel_pin);
+    void initchangeWidget(pin_info_t sel_pin);
+    void setVisibleUi(QString func);
 private slots:
     void on_comboBox_devfunc_currentIndexChanged(const QString &arg1);
 
     void on_pushButton_save_clicked();
 
-    void on_comboBox_usefunc_currentIndexChanged(const QString &arg1);
+    void on_comboBox_devchnl_currentIndexChanged(const QString &arg1);
+
+signals:
+    void refreshTreeWidget(void);
 
 private:
     Ui::PinInfoWidget *ui;
-    QString typeInfo;
+    RTduinoConfig *rtduino;
+
+    QString ui_type;
+    QString select_pin;
 };
 
 #endif // PININFOWIDGET_H

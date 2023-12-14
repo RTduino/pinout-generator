@@ -2,6 +2,7 @@
 
 #include <QApplication>
 #include <QSettings>
+
 void regedit_new(QString appPath,QString className,QString suffix,QString value)
 {
     QString baseUrl("HKEY_CURRENT_USER\\Software\\Classes");    // 注册表的位置
@@ -17,16 +18,7 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    McuInfo::getInstance()->mcuSeriesRegister(new Stm32PinsMap, "STM32");
-//    McuInfo::getInstance()->mcuSeriesRegister(new Ch32PinsMap, "CH32");
-//    McuInfo::getInstance()->mcuSeriesRegister(new DefaultPinsMap, "DEFAULT");
-    McuInfo::getInstance()->mcuSeriesShow(); // 注册支持的MCU
-
-    McuInfo::getInstance()->mcuSeriesNowSet(McuInfo::getInstance()->boardMcuList[0]);
-
     MainWindow w;
-
-    w.setXmlfileName(""); // 默认XMLfile是没有的
 
     if(argc == 1) {		//设置条件不用每次都设置
         QString appPath = qApp->applicationFilePath();
@@ -35,12 +27,17 @@ int main(int argc, char *argv[])
         QString suffix(".rdpg");                       // 关联的文件类型
         QString value("自定义文件类型");
         regedit_new(appPath,className,suffix,value);
+        w.initStackedWidget();
     }
     if(argc == 2)
     {
-        w.setXmlfileName(argv[1]);
+        RTduinoConfig::getInstance()->parsePinInfoJson(argv[1]);
+        QFileInfo fileInfo(argv[1]);
+        RTduinoConfig::getInstance()->getProjectInfo()->project_path = fileInfo.path();
+        RTduinoConfig::getInstance()->getProjectInfo()->project_name = fileInfo.baseName();
+        w.initStackedWidget();
     }
-    w.loadXmlfileToUi();
+
     w.show();
     return a.exec();
 }

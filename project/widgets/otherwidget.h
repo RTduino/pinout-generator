@@ -3,6 +3,7 @@
 
 #include <QLineEdit>
 #include <QWidget>
+#include <rtduinoconfig.h>
 
 class HotkeyLineEdit : public QLineEdit
 {
@@ -28,10 +29,6 @@ public:
     explicit OtherWidget(QWidget *parent = nullptr);
     ~OtherWidget();
 
-    void onloadUi();
-    void updateUi();
-
-    // page生命周期函数
     void loadUi();
     void refreshUi();
     void quitUi();
@@ -47,6 +44,7 @@ private slots:
 
 private:
     Ui::OtherWidget *ui;
+    RTduinoConfig *rtduino;
 };
 
 #endif // OTHERWIDGET_H

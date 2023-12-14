@@ -2,14 +2,12 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QDebug>
 #include <funcwidget.h>
 #include <otherwidget.h>
 #include <pinswidget.h>
 #include <projwidget.h>
-#include "mcuinfo.h"
-#include "xmlfile.h"
-#include "creatfile.h"
+#include <rtduinoconfig.h>
+#include <createfile.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -22,25 +20,19 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-
-    void setXmlfileName(QString file);
     void initStackedWidget();
-    void updateProUi();
-    void loadXmlfileToUi();
-public slots:
-    void dealWidget();
-    void projWidgetSave();
-    void projWidgetOpen(QString &file);
 private slots:
+    void dealWidget();
+    void updateProjectInfo();
     void on_pushButton_procreat_clicked();
 
 private:
     Ui::MainWindow *ui;
-    QString xmlfileName;
-    FuncWidget  *funcPage;
-    OtherWidget *otherPage;
-    PinsWidget  *pinsPage;
-    ProjWidget  *projPage;
-    CreatFile   *creat;
+    FuncWidget  *ui_func;
+    OtherWidget *ui_other;
+    PinsWidget  *ui_pins;
+    ProjWidget  *ui_proj;
+    RTduinoConfig *rtduino;
+    CreateFile *cfile;
 };
 #endif // MAINWINDOW_H

@@ -33,6 +33,21 @@
        </widget>
       </item>
       <item>
+       <widget class="QLabel" name="label_childmcu">
+        <property name="font">
+         <font>
+          <family>微软雅黑 Light</family>
+          <pointsize>14</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QLabel" name="label_board">
         <property name="font">
          <font>

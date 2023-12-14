@@ -22,11 +22,15 @@
    <string>Pin configuration</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="1" column="1" colspan="2">
-    <widget class="QComboBox" name="comboBox_devfunc"/>
+   <item row="6" column="0">
+    <widget class="QLabel" name="label_devchnl">
+     <property name="text">
+      <string>设备通道</string>
+     </property>
+    </widget>
    </item>
-   <item row="4" column="1">
-    <widget class="QComboBox" name="comboBox_rttport"/>
+   <item row="6" column="1" colspan="2">
+    <widget class="QComboBox" name="comboBox_devchnl"/>
    </item>
    <item row="1" column="0">
     <widget class="QLabel" name="label_devfunc">
@@ -35,24 +39,23 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="0">
-    <widget class="QLabel" name="label_usefunc">
-     <property name="text">
-      <string>引脚功能</string>
+   <item row="7" column="0" colspan="3">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
      </property>
-    </widget>
-   </item>
-   <item row="3" column="0">
-    <widget class="QLabel" name="label_rttnumber">
-     <property name="text">
-      <string>引脚编号</string>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
      </property>
-    </widget>
+    </spacer>
    </item>
-   <item row="4" column="2">
-    <widget class="QComboBox" name="comboBox_rttpin"/>
+   <item row="3" column="1">
+    <widget class="QComboBox" name="comboBox_rttport"/>
    </item>
-   <item row="5" column="1" colspan="2">
+   <item row="4" column="1" colspan="2">
     <widget class="QComboBox" name="comboBox_vol5v">
      <item>
       <property name="text">
@@ -66,65 +69,38 @@
      </item>
     </widget>
    </item>
-   <item row="4" column="0">
-    <widget class="QLabel" name="label_rttportpin">
-     <property name="text">
-      <string>引脚编号</string>
-     </property>
-    </widget>
+   <item row="3" column="2">
+    <widget class="QComboBox" name="comboBox_rttpin"/>
    </item>
-   <item row="9" column="0" colspan="3">
+   <item row="8" column="0" colspan="3">
     <widget class="QPushButton" name="pushButton_save">
      <property name="text">
       <string>Save</string>
      </property>
     </widget>
    </item>
-   <item row="7" column="1" colspan="2">
-    <widget class="QComboBox" name="comboBox_devchnl"/>
-   </item>
    <item row="2" column="1" colspan="2">
     <widget class="QComboBox" name="comboBox_usefunc"/>
    </item>
-   <item row="3" column="1" colspan="2">
-    <widget class="QComboBox" name="comboBox_rttnumber"/>
+   <item row="5" column="1" colspan="2">
+    <widget class="QComboBox" name="comboBox_devname"/>
    </item>
-   <item row="7" column="0">
-    <widget class="QLabel" name="label_devchnl">
-     <property name="text">
-      <string>设备通道</string>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="0">
+   <item row="5" column="0">
     <widget class="QLabel" name="label_devname">
      <property name="text">
       <string>设备名字</string>
      </property>
     </widget>
    </item>
-   <item row="6" column="1" colspan="2">
-    <widget class="QComboBox" name="comboBox_devname"/>
-   </item>
-   <item row="5" column="0">
+   <item row="4" column="0">
     <widget class="QLabel" name="label_vol5v">
      <property name="text">
       <string>5V容忍</string>
      </property>
     </widget>
    </item>
-   <item row="8" column="0" colspan="3">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
+   <item row="1" column="1" colspan="2">
+    <widget class="QComboBox" name="comboBox_devfunc"/>
    </item>
    <item row="0" column="0" colspan="3" alignment="Qt::AlignHCenter">
     <widget class="QLabel" name="label_title">
@@ -138,6 +114,20 @@
      </property>
      <property name="text">
       <string>TextLabel</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="label_usefunc">
+     <property name="text">
+      <string>引脚功能</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="label_rttportpin">
+     <property name="text">
+      <string>引脚编号</string>
      </property>
     </widget>
    </item>

@@ -57,6 +57,7 @@ OtherWidget::OtherWidget(QWidget *parent) :
     ui(new Ui::OtherWidget)
 {
     ui->setupUi(this);
+    rtduino = RTduinoConfig::getInstance();
 }
 
 OtherWidget::~OtherWidget()
@@ -140,7 +141,7 @@ void OtherWidget::quitUi()
 
 void OtherWidget::refreshUi()
 {
-    qDebug() << this->objectName() << "refresh";
+
 }
 
 void OtherWidget::on_checkBox_delete_stateChanged(int arg1)

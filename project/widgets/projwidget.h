@@ -2,6 +2,9 @@
 #define PROJWIDGET_H
 
 #include <QWidget>
+#include <rtduinoconfig.h>
+#include <QFileDialog>
+#include <QMessageBox>
 
 namespace Ui {
 class ProjWidget;
@@ -15,35 +18,32 @@ public:
     explicit ProjWidget(QWidget *parent = nullptr);
     ~ProjWidget();
 
-    QString getFileName(void);
-    QString getFilePath(void);
-
-    // page生命周期函数
     void loadUi();
     void refreshUi();
     void quitUi();
-signals:
 
-    void projSave(void);
-    void projOpen(QString &file);
+signals:
+    void updateProject(void);
+
+private:
+    bool checkConfigInfo(void);
 
 private slots:
-    void on_comboBox_mcuserias_currentIndexChanged(const QString &arg1);
-
     void on_pushButton_save_clicked();
+
+    void on_pushButton_image_clicked();
 
     void on_pushButton_path_clicked();
 
     void on_pushButton_open_clicked();
 
-    void on_pushButton_image_clicked();
+    void on_comboBox_mcuserias_currentIndexChanged(const QString &arg1);
 
 private:
     Ui::ProjWidget *ui;
-    QString xmlfile;
+    RTduinoConfig *rtduino;
 
-    QString xmlfilePath;
-    QString xmlfileName;
+    QStringList all_mcu_series;
 };
 
 #endif // PROJWIDGET_H

@@ -1,4 +1,4 @@
-QT       += core gui xml
+QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -8,40 +8,11 @@ CONFIG += c++11
 # In order to do so, uncomment the following line.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-SOURCES += \
-    creatfile.cpp \
-    funcwidget.cpp \
-    main.cpp \
-    mainwindow.cpp \
-    mcuinfo.cpp \
-    otherwidget.cpp \
-    pininfowidget.cpp \
-    pinsmap.cpp \
-    pinswidget.cpp \
-    projwidget.cpp \
-    stm32pinsmap.cpp \
-    xmlfile.cpp
+INCLUDEPATH += $$PWD/widgets/
+include($$PWD/widgets/widget.pri)
 
-HEADERS += \
-    creatfile.h \
-    funcwidget.h \
-    mainwindow.h \
-    mcuinfo.h \
-    otherwidget.h \
-    pininfowidget.h \
-    pinsmap.h \
-    pinswidget.h \
-    projwidget.h \
-    stm32pinsmap.h \
-    xmlfile.h
-
-FORMS += \
-    funcwidget.ui \
-    mainwindow.ui \
-    otherwidget.ui \
-    pininfowidget.ui \
-    pinswidget.ui \
-    projwidget.ui
+INCLUDEPATH += $$PWD/main/
+include($$PWD/main/main.pri)
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
