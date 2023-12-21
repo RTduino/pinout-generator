@@ -1,101 +1,94 @@
-# 软件使用指南
+# pinout-generator
 
 pinout-generator是为了方便用户将BSP对接到[RTduino](https://github.com/RTduino/RTduino)上而设计的一个自动化源文件生成工具。下面以 [stm32f103-blue-pill](https://github.com/RT-Thread/rt-thread/tree/master/bsp/stm32/stm32f103-blue-pill/applications/arduino_pinout) 为例，展示如何使用本软件，并将该BSP对接到RTduino上。
 
-**参考资料：**
-- [RTduino对接文档](https://github.com/RTduino/RTduino/blob/master/README_zh.md#4-%E5%A6%82%E4%BD%95%E7%BB%99%E6%9F%90%E4%B8%AAbsp%E9%80%82%E9%85%8Drtduino)
-- [RTduino对接RT-Thread BSP教程](https://github.com/RTduino/RTduino/blob/master/docs/zh/RTduino%E5%AF%B9%E6%8E%A5RT-Thread%20BSP%E6%95%99%E7%A8%8B.md)
-- [RTduino对接到RT-Thread BSP手把手教程（视频）](https://www.bilibili.com/video/BV1WG41177Cu)
+## 1 如何使用软件
 
-## 1 如何对接
+### 1.1 创建工程项目
 
-### 1.1 添加BSP路径
+打开软件，进入**项目配置**页面。根据本次示例板卡，配置信息如下图。
 
-### 1.2 添加RT-Thread引脚跟Arduino引脚的对应关系
+![image-20231221191345958](figures/image-20231221191345958.png)
 
-可以右键唤起菜单，或者直接点击快捷添加按钮，其他的像插入、删除等等，都是对这个表进行操作。
+> 注意
+>
+> 完成项目配置后，请点击**保存配置**。
 
-![image-20220920201803765](figures/image-20220920201803765.png)
+### 1.2 进入引脚配置
 
-目前支持以下IO对应关系：
-
-![image-20220920201447268](figures/image-20220920201447268.png)
-
-对于stm32f103-blue-pill这款BSP的引脚对应关系如图：
+stm32f103-blue-pill的引脚分配图如下：
 
 ![blue-pill-f103-pinout](figures/blue-pill-f103-pinout.jpg)
 
-因此，我们完成这个表格
+根据引脚分配图填写引脚配置。在空白页**右键菜单**唤起菜单项进行引脚添加或其他。
 
-![image-20220920202116524](figures/image-20220920202116524.png)
+![image-20231221192548974](figures/image-20231221192548974.png)
 
-### 1.3 填写一些重要选项
+针对本次stm32f103-blue-pill，完成引脚配置如下：
 
-这时候我们再来看看这几个选项：
+![image-20231221192719207](figures/image-20231221192719207.png)
 
-![image-20220920202150880](figures/image-20220920202150880.png)
+### 1.3 进行功能配置
 
-- Serial2：表示板子除了终端串口另外支持的串口。
+首先，了解一下各选项的一个含义：
 
-- Serial3：表示板子除了终端串口另外支持的串口。
+- Serial2：除了RTduino终端串口另外支持的串口。
+- Serial3：除了RTduino终端串口另外支持的串口。
+- Timer：RTduino需要的默认定时器。
+- SPI设备名称：RTduino需要的默认SPI设备。
+- SPI-SS：SPI设备的SS(片选)引脚的编号。
+- LED引脚：RTduino默认的LED灯引脚。
+- I2C设备名称：RTduino需要的默认I2C设备。
+- 示例程序：RTduino对接Demo程序。
+  - 循环打印<Hello！Arduino>。
+  - LED灯以一定频率闪烁。
+- 作者信息：对接BSP的作者。
+- 工作频率：表示BSP工作的主频，是必填项。
+- PWM转SPI配置：部分BSP因为资源受限，可能会将已经对接的PWM设备引脚用作SPI的引脚，但是这里生成的代码仅仅只是一个框架，仍需用户**自行补充**(具体操作见下文)。
 
-- SPI-SS：表示的是SPI的SS(片选)引脚的编号。
+根据bsp需求，具体配置信息如下：
 
-- SPI：表示对接的默认SPI设备。
+![image-20231221193651531](figures/image-20231221193651531.png)
 
-- PIN-LED：表示默认的LED灯引脚。
+### 1.4 生成代码
 
-- I2C：表示对接的默认I2C设备。
+截至到这，已经完成了基本的对接配置工作，可以生成对应的工程了。
 
-- 示例程序：表示生成的默认程序内容，这里包括print或者ledblink。
+![image-20231221193952983](figures/image-20231221193952983.png)
 
-- 定时器：表示默认定时器。
+这里对生成的文件进行一个简单的介绍：
 
-- 频率：表示BSP工作的主频，是必填项。
-- 作者：表示对接这个的人
+- arduino_pinout
+  - pins_arduino.c：保存了RT-Thread引脚和RTduino引脚的对应关系。
+  - pins_arduino.h：保存了RTduino功能配置相关宏定义。
+  - README.md：说明文档。
+  - SConscript：RT-Thread工程构建脚本。
+  - stm32f103-blue-pill-pinout.jpg：引脚分配图。
+- arduino_main.cpp：RTduino示例代码。
+- Kconfig.demo：menuconfig相关代码，这里需要**简单移植**(具体操作见下文)。
+- SConscript：RT-Thread工程构建脚本。
+- stm32f103-blue-pill.rdpg：pinout-generator的工程文件，用户可双击打开。
 
-根据BSP引脚分布图，这一块进行如下配置：
+### 1.5 用户需自行修改
 
-![image-20220920202756490](figures/image-20220920202756490.png)
+#### Kconfig移植
 
-### 1.4 导出文件
+将`Kconfig.demo`里卖的`Onboard Peripheral Drivers`和`On-chip Peripheral Drivers`的内容拷贝至bsp的board文件夹中的Kconfig文件(bsp/stm32/stm32f103-blue-pill/board/Kconfig)，下图为`Onboard Peripheral Drivers`内容的拷贝示例。
 
-这时候我们就可以导出了，会生成以下几个重要文件
+![image-20231221222553471](figures/image-20231221222553471.png)
 
-![image-20220920202901315](figures/image-20220920202901315.png)
+#### PWM转SPI代码移植(非必要，不支持可跳过此章节)
 
-- arduino_main.cpp：里面是一个示例程序。
-- pins_arduino.c：这个文件里面保存着我们的映射表。
-- pins_arduino.h：这个文件保存着比较重要的宏定义。
-- Sconscript：Scons构建脚本。
-- Kconfig：Kconfig配置文件。
+本bsp是不用支持这个选项的，但是这里为了演示该部分如何实现，这里我们配置pwm转spi的spi设备为`spi1`来进行一个本章节的简要介绍。
 
-### 1.5 用户需要修改的地方
+![image-20231221224018047](figures/image-20231221224018047.png)
 
-#### 1.5.1 pins_arduino.c
+![image-20231221224434767](figures/image-20231221224434767.png)
 
-![image-20220920203147439](figures/image-20220920203147439.png)
+> 注意：
+>
+> 这次只是单纯使用CubeMX生成跟SPI引脚初始化有关的代码，生成完代码后，建议重新恢复CubeMX工程。
 
-由于软件对注册的设备具体引脚无法区分，所以这块需要人为实现，比如D14是I2C的SDA引脚，需要将I2C-xx修改为I2C-SDA。如下：
+当选择了pwm转spi后，`pins_arduino.c`文件会生成如下代码，根据注释补充完整即可。补充完整请自行删除`#error`编译报警。
 
-![image-20220920203332254](figures/image-20220920203332254.png)
-
-#### 1.5.2 pins_arduino.h
-
-![image-20220920203439163](figures/image-20220920203439163.png)
-
-类似，对于这个文件也需要做相应的修改。
-
-![image-20220920203512658](figures/image-20220920203512658.png)
-
-#### 1.5.3 Kconfig
-
-在arduino_pinout文件夹中，会生成一个Kconfig文件夹，这个文件夹我们是不能留的，但是需要把里面的内容拷贝到board文件夹下的Kconfig。
-
-![image-20220920203942490](figures/image-20220920203942490.png)
-
-到这，基本就移植完了，最后就是为该bsp编写RTduino的README.md文件（位于applications/arduino_pinout文件夹下）了。README.md可以参考以下BSP编写：
-
-- https://github.com/RT-Thread/rt-thread/tree/master/bsp/stm32/stm32f401-st-nucleo/applications/arduino_pinout
-- https://github.com/RT-Thread/rt-thread/tree/master/bsp/stm32/stm32f103-blue-pill/applications/arduino_pinout
-- https://github.com/RT-Thread/rt-thread/tree/master/bsp/stm32/stm32l475-atk-pandora/applications/arduino_pinout
+![image-20231221232940946](figures/image-20231221232940946.png)
