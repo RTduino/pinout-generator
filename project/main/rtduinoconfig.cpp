@@ -481,6 +481,18 @@ QStringList RTduinoConfig::getArduinoDigital()
     return _list;
 }
 
+QString RTduinoConfig::getArduinoNumber(QString port, QString pin)
+{
+    QString arduino;
+    foreach(auto info, all_pin_infos)
+    {
+        if(info.pin_rttport == port && info.pin_rttpin == pin)
+            arduino = info.pin_arduino;
+    }
+
+    return arduino;
+}
+
 pin_info_t RTduinoConfig::getPinInfo(QString arduino)
 {
     pin_info_t _pin_info;

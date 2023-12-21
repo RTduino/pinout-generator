@@ -136,6 +136,7 @@ public:
     bool removePinInfo(QString arduino);
     bool changePinInfo(QString arduino, pin_info_t info);
     QStringList getArduinoDigital(void);
+    QString getArduinoNumber(QString port, QString pin);
     pin_info_t getPinInfo(QString arduino);
     void clearPinInfoList(void)
     {

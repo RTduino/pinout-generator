@@ -182,7 +182,7 @@ bool CreateFile::creatPinoutCFile()
     }
     out << "};\n";
 
-    createPwm2Spi();
+    out << createPwm2Spi();
 
     file.close();
 
@@ -192,6 +192,45 @@ bool CreateFile::creatPinoutCFile()
 QString CreateFile::createPwm2Spi()
 {
     QString pwm2spi_code;
+
+    if (!rtduino->getFunctionInfo()->pwmtospi.spi_name.isEmpty())
+    {
+        pwm2spi_code += "\n";
+        pwm2spi_code += "#ifdef RTDUINO_USING_SPI\n";
+        pwm2spi_code += "   #error \"Please modify switchToSPI().\"\n";
+        pwm2spi_code += "void switchToSPI(const char *bus_name)\n";
+        pwm2spi_code += "{\n";
+        pwm2spi_code += "    if(!rt_strcmp(bus_name, \"" +
+                rtduino->getFunctionInfo()->pwmtospi.spi_name + "\"))\n";
+        pwm2spi_code += "    {\n";
+        pwm2spi_code += "        /**" + rtduino->getFunctionInfo()->pwmtospi.spi_name.toUpper() +
+                " GPIO Configuration\n";
+        pwm2spi_code += "        P" + rtduino->getFunctionInfo()->pwmtospi.sck_port + "." +
+                rtduino->getFunctionInfo()->pwmtospi.sck_pin + "     ------> " +
+                rtduino->getFunctionInfo()->pwmtospi.spi_name.toUpper() + "_SCK\n";
+        pwm2spi_code += "        P" + rtduino->getFunctionInfo()->pwmtospi.miso_port + "." +
+                rtduino->getFunctionInfo()->pwmtospi.miso_pin + "     ------> " +
+                rtduino->getFunctionInfo()->pwmtospi.spi_name.toUpper() + "_MISO\n";
+        pwm2spi_code += "        P" + rtduino->getFunctionInfo()->pwmtospi.mosi_port + "." +
+                rtduino->getFunctionInfo()->pwmtospi.mosi_pin + "     ------> " +
+                rtduino->getFunctionInfo()->pwmtospi.spi_name.toUpper() + "_MOSI\n";
+        pwm2spi_code += "        */\n";
+        pwm2spi_code += "        /* Open the SPI peripheral clock */\n\n";
+        pwm2spi_code += "        /* DeInit all GPIO */\n\n";
+        pwm2spi_code += "        /* Init all GPIO */\n\n";
+        pwm2spi_code += "        LOG_W(\""+
+                rtduino->getArduinoNumber(rtduino->getFunctionInfo()->pwmtospi.sck_port,
+                                          rtduino->getFunctionInfo()->pwmtospi.sck_pin) + ", "+
+                rtduino->getArduinoNumber(rtduino->getFunctionInfo()->pwmtospi.miso_port,
+                                          rtduino->getFunctionInfo()->pwmtospi.miso_pin) + " and "+
+                rtduino->getArduinoNumber(rtduino->getFunctionInfo()->pwmtospi.mosi_port,
+                                          rtduino->getFunctionInfo()->pwmtospi.mosi_pin) +
+                " will switch from PWM to SPI\");\n";
+        pwm2spi_code += "    }\n";
+        pwm2spi_code += "}\n";
+        pwm2spi_code += "#endif /* RTDUINO_USING_SPI */\n";
+    }
+
     return pwm2spi_code;
 }
 
