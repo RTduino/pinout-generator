@@ -58,6 +58,36 @@ OtherWidget::OtherWidget(QWidget *parent) :
 {
     ui->setupUi(this);
     rtduino = RTduinoConfig::getInstance();
+
+    ui->rtduino_git_url->setOpenExternalLinks(true);
+    ui->rtduino_git_url->setText("<a style='color: green; text-decoration: none' "
+                                 "href = https://github.com/RTduino/RTduino>"
+                                 "https://github.com/RTduino/RTduino");
+
+    ui->rtduino_gitee_url->setOpenExternalLinks(true);
+    ui->rtduino_gitee_url->setText("<a style='color: green; text-decoration: none' "
+                                   "href = https://gitee.com/rtduino/RTduino>"
+                                   "https://gitee.com/rtduino/RTduino");
+
+    ui->doc_git_url->setOpenExternalLinks(true);
+    ui->doc_git_url->setText("<a style='color: green; text-decoration: none' "
+                                 "href = https://rtduino.github.io/RTduino/#/zh/manual/adapt/bsp/stm32/stm32>"
+                                 "https://rtduino.github.io/RTduino/#/zh/manual/adapt/bsp/stm32/stm32");
+
+    ui->doc_gitee_url->setOpenExternalLinks(true);
+    ui->doc_gitee_url->setText("<a style='color: green; text-decoration: none' "
+                                   "href = https://rtduino.gitee.io/#/zh/manual/adapt/bsp/stm32/stm32>"
+                                   "https://rtduino.gitee.io/#/zh/manual/adapt/bsp/stm32/stm32");
+
+    ui->autor_liyony_url->setOpenExternalLinks(true);
+    ui->autor_liyony_url->setText("<a style='color: green; text-decoration: none' "
+                                  "href = https://github.com/liYony>"
+                                  "https://github.com/liYony");
+
+    ui->autor_meco_url->setOpenExternalLinks(true);
+    ui->autor_meco_url->setText("<a style='color: green; text-decoration: none' "
+                                "href = https://github.com/mysterywolf>"
+                                "https://github.com/mysterywolf");
 }
 
 OtherWidget::~OtherWidget()
