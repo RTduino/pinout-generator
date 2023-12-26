@@ -556,9 +556,16 @@ QStringList RTduinoConfig::getDeviceChannel(QString name)
 QString RTduinoConfig::getDeviceNumber(QString name)
 {
     QRegExp Rename("\\d+");
-    Rename.indexIn(name, 0);
 
-    return Rename.cap(0);
+    QStringList number_list;
+    int pos = 0;
+
+    while ((pos = Rename.indexIn(name, pos)) != -1) {
+          number_list << Rename.cap(0);
+          pos += Rename.matchedLength();
+    }
+
+    return number_list.last();
 }
 
 QString RTduinoConfig::getDeviceIoPort(QString name, QString iomap)

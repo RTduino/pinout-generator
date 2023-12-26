@@ -165,7 +165,7 @@ bool CreateFile::creatPinoutCFile()
             linestr += (", " + pmap.pin_channel);
         }
 
-        linestr += "};";
+        linestr += "},";
 
         // 注释TAB对齐
         uint8_t tab_align = 40;
