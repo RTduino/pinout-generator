@@ -1,5 +1,5 @@
 # pinout-generator
 
-使用教程：
+**English** | [中文](README_zh.md)
 
-- [STM32对接RTduino](https://rtduino.github.io/RTduino/#/zh/manual/adapt/bsp/stm32/stm32?id=_4-pinout-generator%e5%b7%a5%e5%85%b7)
+
