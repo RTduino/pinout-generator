@@ -426,7 +426,7 @@ bool CreateFile::creatMainCppFile()
     }
     else
     {
-        out << "    Serial.println(\"Hello Arduino!\");\n";
+        out << "    Serial.println(\"Hello RTduino!\");\n";
         out << "    delay(800);\n";
     }
     out << "}\n";
