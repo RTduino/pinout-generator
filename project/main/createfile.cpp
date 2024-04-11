@@ -77,7 +77,7 @@ bool CreateFile::createSConscript()
     pinout << "cwd = GetCurrentDir()\n";
     pinout << "src = Glob('*.c') + Glob('*.cpp')\n";
     pinout << "inc = [cwd]\n\n";
-    pinout << "group = DefineGroup('RTduino', src, depend = ['PKG_USING_RTDUINO'], CPPPATH = inc)\n\n";
+    pinout << "group = DefineGroup('RTduino-pinout', src, depend = ['PKG_USING_RTDUINO'], CPPPATH = inc)\n\n";
     pinout << "Return('group')\n";
 
     pinoutsconsfile.close();

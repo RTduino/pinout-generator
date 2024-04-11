@@ -1,0 +1,193 @@
+{
+    "series": "GD32",
+    "date": "2023-12-26",
+    "author": "liYony",
+    "childseries":[
+        "GD32F1",
+        "GD32F2",
+        "GD32F3"
+    ],
+    "pininfo": {
+        "format": "GET_PIN((port), (pin))",
+        "ports": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H",
+            "I"
+        ],
+        "pins": [
+            "0",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "11",
+            "12",
+            "13",
+            "14",
+            "15"
+        ]
+    },
+    "timers":[
+        "timer1",
+        "timer2",
+        "timer3",
+        "timer4",
+        "timer5",
+        "timer6",
+        "timer7",
+        "timer8",
+        "timer9",
+        "timer10",
+        "timer11",
+        "timer12",
+        "timer13"
+    ],
+    "iofunctions": [
+        {
+            "function": "GPIO",
+            "help": "this is help.",
+            "support": true,
+            "ioremaps": [],
+            "names": [],
+            "channels": []
+        },
+        {
+            "function": "UART",
+            "help": "this is help.",
+            "support": true,
+            "ioremaps": [
+                "TX",
+                "RX"
+            ],
+            "names": [
+                "uart1",
+                "uart2",
+                "uart3",
+                "uart4",
+                "uart5",
+                "uart6",
+                "uart7"
+            ],
+            "channels": []
+        },
+        {
+            "function": "PWM",
+            "help": "this is help.",
+            "support": true,
+            "ioremaps": [],
+            "names": [
+                "pwm1",
+                "pwm2",
+                "pwm3",
+                "pwm4",
+                "pwm5",
+                "pwm6",
+                "pwm7",
+                "pwm8",
+                "pwm9",
+                "pwm10",
+                "pwm11",
+                "pwm12",
+                "pwm13",
+                "pwm14"
+            ],
+            "channels": [
+                "0",
+                "1",
+                "2",
+                "3"
+            ]
+        },
+        {
+            "function": "ADC",
+            "help": "this is help.",
+            "support": true,
+            "ioremaps": [],
+            "names": [
+                "adc0",
+                "adc1",
+                "adc2"
+            ],
+            "channels": [
+                "0",
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "10",
+                "11",
+                "12",
+                "13",
+                "14",
+                "15"
+            ]
+        },
+        {
+            "function": "DAC",
+            "help": "this is help.",
+            "support": false,
+            "ioremaps": [],
+            "names": [],
+            "channels": []
+        },
+        {
+            "function": "SPI",
+            "help": "this is help.",
+            "support": true,
+            "ioremaps": [
+                "MISO",
+                "MOSI",
+                "SCK"
+            ],
+            "names": [
+                "spi0",
+                "spi1",
+                "spi2",
+                "spi3",
+                "spi4"
+            ],
+            "channels": []
+        },
+        {
+            "function": "I2C",
+            "help": "this is help.",
+            "support": true,
+            "ioremaps": [
+                "SCL",
+                "SDA"
+            ],
+            "names": [
+                "i2c0",
+                "i2c1",
+                "i2c2",
+                "i2c3"
+            ],
+            "channels": []
+        },
+        {
+            "function": "USB",
+            "help": "this is help.",
+            "support": false,
+            "ioremaps": [],
+            "names": [],
+            "channels": []
+        }
+    ]
+}
