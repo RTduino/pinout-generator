@@ -2,6 +2,7 @@
 
 #include <QApplication>
 #include <QSettings>
+#include <version.h>
 
 void regedit_new(QString appPath,QString className,QString suffix,QString value)
 {
@@ -39,5 +40,15 @@ int main(int argc, char *argv[])
     }
 
     w.show();
+    QString version = "RTduino Pinout Generator V" + get_version_string();
+    w.setWindowTitle(version);
+
     return a.exec();
+}
+
+QString get_version_string(void)
+{
+    return QString::number(PG_VERSION_MAJOR) + "." +
+           QString::number(PG_VERSION_MINOR) + "." +
+           QString::number(PG_VERSION_PATCH);
 }

@@ -6,3 +6,4 @@ SOURCES += \
 HEADERS += \
     $$PWD/createfile.h \
     $$PWD/rtduinoconfig.h \
+    $$PWD/version.h
