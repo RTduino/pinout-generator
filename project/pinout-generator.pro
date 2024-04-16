@@ -14,6 +14,8 @@ include($$PWD/widgets/widget.pri)
 INCLUDEPATH += $$PWD/main/
 include($$PWD/main/main.pri)
 
+include ($$PWD/third-party/QSimpleUpdater/QSimpleUpdater.pri)
+
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
