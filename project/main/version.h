@@ -7,7 +7,7 @@
 #define PG_VERSION_MINOR                0               /**< Minor version number (x.X.x) */
 #define PG_VERSION_PATCH                3               /**< Patch version number (x.x.X) */
 
-#define DEFS_URL "https://raw.githubusercontent.com/RTduino/pinout-generator/master/tools/updates.json"
+#define DEFS_URL "https://raw.githubusercontent.com/RTduino/pinout-generator/master/software/updates.json"
 
 QString get_version_string(void);
 
