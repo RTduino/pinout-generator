@@ -20,6 +20,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
     MainWindow w;
+    QString version = "RTduino Pinout Generator V" + get_version_string();
 
     if(argc == 1) {		//设置条件不用每次都设置
         QString appPath = qApp->applicationFilePath();
@@ -40,8 +41,8 @@ int main(int argc, char *argv[])
     }
 
     w.show();
-    QString version = "RTduino Pinout Generator V" + get_version_string();
     w.setWindowTitle(version);
+    a.setApplicationVersion(get_version_string());
 
     return a.exec();
 }

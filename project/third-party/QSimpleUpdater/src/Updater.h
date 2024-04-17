@@ -56,6 +56,7 @@ public:
    QString platformKey() const;
    QString moduleVersion() const;
    QString latestVersion() const;
+   QString typeVersion() const;
    QString userAgentString() const;
    bool mandatoryUpdate() const;
 
@@ -106,7 +107,7 @@ private:
    QString m_downloadUrl;
    QString m_moduleVersion;
    QString m_latestVersion;
-
+   QString m_typeVersion;
    Downloader *m_downloader;
    QNetworkAccessManager *m_manager;
 };

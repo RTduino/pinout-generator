@@ -2,17 +2,11 @@
   "updates": {
     "windows": {
       "open-url": "",
+      "type-version": "Alpha",
       "latest-version": "2.0.3",
       "download-url": "https://raw.githubusercontent.com/RTduino/pinout-generator/master/software/PinoutGenerator-v2.0.3-Setup.exe",
       "changelog": "This is an example changelog for Windows. Go on...",
-      "mandatory": true
-    },
-    "linux": {
-      "open-url": "",
-      "latest-version": "2.0.3",
-      "download-url": "https://raw.githubusercontent.com/RTduino/pinout-generator/master/software/PinoutGenerator-v2.0.3-Setup.exe",
-      "changelog": "This is an example changelog for Linux. Go on...",
-      "mandatory": true
+      "mandatory-update": false
     }
   }
 }

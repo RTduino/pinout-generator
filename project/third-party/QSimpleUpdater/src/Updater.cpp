@@ -37,6 +37,7 @@ Updater::Updater()
    m_changelog = "";
    m_downloadUrl = "";
    m_latestVersion = "";
+   m_typeVersion = "Release";
    m_customAppcast = false;
    m_notifyOnUpdate = true;
    m_notifyOnFinish = false;
@@ -139,6 +140,15 @@ QString Updater::downloadUrl() const
 QString Updater::latestVersion() const
 {
    return m_latestVersion;
+}
+
+/**
+ * Returns the type version defined by the update definitions file.
+ * \warning Must is <Alpha> <Beta> <Release>
+ */
+QString Updater::typeVersion() const
+{
+   return m_typeVersion;
 }
 
 /**
@@ -410,6 +420,10 @@ void Updater::onReply(QNetworkReply *reply)
    m_changelog = platform.value("changelog").toString();
    m_downloadUrl = platform.value("download-url").toString();
    m_latestVersion = platform.value("latest-version").toString();
+   /* https://hexingxing.cn/alpha-beta-rc-release/ */
+   /* <Alpha> <Beta> <Release> */
+   m_typeVersion = platform.value("type-version").toString().isEmpty()
+           ? m_typeVersion : platform.value("type-version").toString();
    if (platform.contains("mandatory-update"))
       m_mandatoryUpdate = platform.value("mandatory-update").toBool();
 
@@ -440,7 +454,7 @@ void Updater::setUpdateAvailable(const bool available)
       }
 
       QString title
-          = "<h3>" + tr("Version %1 of %2 has been released!").arg(latestVersion()).arg(moduleName()) + "</h3>";
+          = "<h3>" + tr("Version %1(%2) of %3 has been released!").arg(latestVersion()).arg(typeVersion()).arg(moduleName()) + "</h3>";
 
       box.setText(title);
       box.setInformativeText(text);

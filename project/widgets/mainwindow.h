@@ -8,6 +8,7 @@
 #include <projwidget.h>
 #include <rtduinoconfig.h>
 #include <createfile.h>
+#include <QSimpleUpdater.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -34,5 +35,6 @@ private:
     ProjWidget  *ui_proj;
     RTduinoConfig *rtduino;
     CreateFile *cfile;
+    QSimpleUpdater *updater;
 };
 #endif // MAINWINDOW_H

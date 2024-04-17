@@ -2,7 +2,9 @@
 #include "ui_mainwindow.h"
 #include <QDir>
 #include <QDebug>
+#include <QSslSocket>
 #include <QDesktopServices>
+#include <version.h>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -10,6 +12,24 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     rtduino = RTduinoConfig::getInstance();
+    /* QSimpleUpdater is single-instance */
+    qDebug()<<"QSslSocket:"<<QSslSocket::sslLibraryBuildVersionString();
+    qDebug() << "OpenSSL support:" << QSslSocket::supportsSsl();
+    if (QSslSocket::supportsSsl() == true)
+    {
+        updater = QSimpleUpdater::getInstance();
+
+        /* Config for updates */
+        updater->setModuleVersion(DEFS_URL, get_version_string());
+        updater->setNotifyOnFinish(DEFS_URL, false);
+        updater->setNotifyOnUpdate(DEFS_URL, true);
+        updater->setUseCustomAppcast(DEFS_URL, false);
+        updater->setDownloaderEnabled(DEFS_URL, true);
+        updater->setMandatoryUpdate(DEFS_URL, false);
+
+        /* Check for updates */
+        updater->checkForUpdates(DEFS_URL);
+    }
     cfile = new CreateFile;
 }
 
