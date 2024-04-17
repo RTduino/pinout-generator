@@ -2,8 +2,8 @@
   "updates": {
     "windows": {
       "open-url": "",
-      "type-version": "Alpha",
-      "latest-version": "2.0.3",
+      "type-version": "Beta",
+      "latest-version": "2.0.4",
       "download-url": "https://raw.githubusercontent.com/RTduino/pinout-generator/master/software/pinout-generator-v2.0.3-setup.exe",
       "changelog": "This is an example changelog for Windows. Go on...",
       "mandatory-update": false
