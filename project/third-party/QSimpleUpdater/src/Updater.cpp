@@ -427,8 +427,12 @@ void Updater::onReply(QNetworkReply *reply)
    if (platform.contains("mandatory-update"))
       m_mandatoryUpdate = platform.value("mandatory-update").toBool();
 
-   /* Compare latest and current version */
-   setUpdateAvailable(compare(latestVersion(), moduleVersion()));
+   /* Must is <Beta> or <Release> */
+   if (m_typeVersion.toUpper() != "ALPHA")
+   {
+      /* Compare latest and current version */
+      setUpdateAvailable(compare(latestVersion(), moduleVersion()));
+   }
    emit checkingFinished(url());
 }
 
