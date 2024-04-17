@@ -1,1 +1,0 @@
-makensis.exe Setup.nsi
