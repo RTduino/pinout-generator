@@ -171,6 +171,16 @@ public:
         func_info_t _info;
         function_info = _info;
     }
+
+    // 自动检测更新
+    void setAutoCheckUpdate(bool auto_check)
+    {
+        auto_check_update = auto_check;
+    }
+    bool getAutoCheckUpdate(void)
+    {
+        return auto_check_update;
+    }
 private:
     bool getJsonObject(QString file, QJsonObject &json_object);
     mcu_series_t *findMcuSeries(QString series_name);
@@ -188,6 +198,9 @@ private:
     // 打开软件的时候读取配置文件获取，全程不可修改
     mcu_series_t now_series;
     QList<mcu_series_t> all_series;
+
+    // 软件启动自动检测更新
+    bool auto_check_update;
 };
 
 bool sortRules(QString &p1, QString &p2);

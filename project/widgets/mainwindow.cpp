@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include <QDir>
 #include <QDebug>
+#include <QSettings>
 #include <QSslSocket>
 #include <QDesktopServices>
 #include <version.h>
@@ -12,11 +13,17 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     rtduino = RTduinoConfig::getInstance();
-    /* QSimpleUpdater is single-instance */
+    /* Set auto check update flag */
+    QSettings setting(qApp->applicationDirPath() +"/Setting.ini", QSettings::IniFormat);
+    rtduino->setAutoCheckUpdate(!setting.value("autoUpdate").toString().isEmpty());
+
     qDebug()<<"QSslSocket:"<<QSslSocket::sslLibraryBuildVersionString();
     qDebug() << "OpenSSL support:" << QSslSocket::supportsSsl();
-    if (QSslSocket::supportsSsl() == true)
+    qDebug() << "Auto Update:" << rtduino->getAutoCheckUpdate();
+
+    if (QSslSocket::supportsSsl() && rtduino->getAutoCheckUpdate())
     {
+        /* QSimpleUpdater is single-instance */
         updater = QSimpleUpdater::getInstance();
 
         /* Config for updates */

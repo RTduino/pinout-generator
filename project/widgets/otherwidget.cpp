@@ -1,6 +1,7 @@
 #include "otherwidget.h"
 #include "ui_otherwidget.h"
 #include <QKeyEvent>
+#include <QSslSocket>
 #include <QSettings>
 #include <QDebug>
 
@@ -88,6 +89,13 @@ OtherWidget::OtherWidget(QWidget *parent) :
     ui->autor_meco_url->setText("<a style='color: green; text-decoration: none' "
                                 "href = https://github.com/mysterywolf>"
                                 "https://github.com/mysterywolf");
+    // 是否支持OpenSSL
+    support_openssl = QSslSocket::supportsSsl();
+    if (support_openssl == false)
+    {
+        ui->checkBox_update->setChecked(false);
+        ui->checkBox_update->setDisabled(true);
+    }
 }
 
 OtherWidget::~OtherWidget()
@@ -103,8 +111,9 @@ void OtherWidget::loadUi()
     QString insertShortcut = setting.value("insertShortcut").toString();    //获取insertShortcut
     QString deleteShortcut = setting.value("deleteShortcut").toString();    //获取deleteShortcut
     QString changeShortcut = setting.value("changeShortcut").toString();    //获取changeShortcut
+    QString autoUpdateCfg = setting.value("autoUpdate").toString();         //获取自动更新配置
 
-    qDebug() << addShortcut << insertShortcut << deleteShortcut << changeShortcut;
+    qDebug() << addShortcut << insertShortcut << deleteShortcut << changeShortcut << autoUpdateCfg;
 
     if(!addShortcut.isEmpty())
     {
@@ -129,6 +138,11 @@ void OtherWidget::loadUi()
         ui->checkBox_change->setChecked(true);
         ui->lineEdit_change->setVisible(true);
         ui->lineEdit_change->setText(changeShortcut);
+    }
+    if(!autoUpdateCfg.isEmpty() && support_openssl == true)
+    {
+        ui->checkBox_update->setEnabled(true);
+        ui->checkBox_update->setChecked(true);
     }
 }
 
@@ -166,6 +180,14 @@ void OtherWidget::quitUi()
     else
     {
         setting.setValue("changeShortcut", "");
+    }
+    if(ui->checkBox_update->isChecked() && support_openssl == true)
+    {
+        setting.setValue("autoUpdate", "Support");
+    }
+    else
+    {
+        setting.setValue("autoUpdate", "");
     }
 }
 

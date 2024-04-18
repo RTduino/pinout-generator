@@ -45,6 +45,7 @@ private slots:
 private:
     Ui::OtherWidget *ui;
     RTduinoConfig *rtduino;
+    bool support_openssl;
 };
 
 #endif // OTHERWIDGET_H
