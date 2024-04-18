@@ -82,6 +82,8 @@
           <widget class="QLabel" name="downloadLabel">
            <property name="font">
             <font>
+             <family>微软雅黑 Light</family>
+             <pointsize>11</pointsize>
              <weight>75</weight>
              <bold>true</bold>
             </font>
@@ -99,6 +101,14 @@
              <height>0</height>
             </size>
            </property>
+           <property name="font">
+            <font>
+             <family>微软雅黑 Light</family>
+             <pointsize>10</pointsize>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
            <property name="value">
             <number>0</number>
            </property>
@@ -109,6 +119,14 @@
          </item>
          <item>
           <widget class="QLabel" name="timeLabel">
+           <property name="font">
+            <font>
+             <family>幼圆</family>
+             <pointsize>12</pointsize>
+             <weight>50</weight>
+             <bold>false</bold>
+            </font>
+           </property>
            <property name="text">
             <string>Time remaining: 0 minutes</string>
            </property>
@@ -150,6 +168,14 @@
       </item>
       <item>
        <widget class="QPushButton" name="openButton">
+        <property name="font">
+         <font>
+          <family>微软雅黑 Light</family>
+          <pointsize>12</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
         <property name="text">
          <string>Open</string>
         </property>
@@ -157,6 +183,14 @@
       </item>
       <item>
        <widget class="QPushButton" name="stopButton">
+        <property name="font">
+         <font>
+          <family>微软雅黑 Light</family>
+          <pointsize>12</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
         <property name="text">
          <string>Stop</string>
         </property>
