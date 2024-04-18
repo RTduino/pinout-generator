@@ -95,6 +95,8 @@ OtherWidget::OtherWidget(QWidget *parent) :
     {
         ui->checkBox_update->setChecked(false);
         ui->checkBox_update->setDisabled(true);
+        ui->checkBox_update_src->setDisabled(true);
+        ui->comboBox_update_src->setDisabled(true);
     }
 }
 
@@ -112,8 +114,10 @@ void OtherWidget::loadUi()
     QString deleteShortcut = setting.value("deleteShortcut").toString();    //获取deleteShortcut
     QString changeShortcut = setting.value("changeShortcut").toString();    //获取changeShortcut
     QString autoUpdateCfg = setting.value("autoUpdate").toString();         //获取自动更新配置
+    QString forceSource = setting.value("forceSource").toString();         //是否使能强制更新源
+    QString sourceUpdate = setting.value("sourceUpdate").toString();         //Gitee or Github
 
-    qDebug() << addShortcut << insertShortcut << deleteShortcut << changeShortcut << autoUpdateCfg;
+    qDebug() << addShortcut << insertShortcut << deleteShortcut << changeShortcut << autoUpdateCfg << forceSource << sourceUpdate;
 
     if(!addShortcut.isEmpty())
     {
@@ -143,6 +147,25 @@ void OtherWidget::loadUi()
     {
         ui->checkBox_update->setEnabled(true);
         ui->checkBox_update->setChecked(true);
+        if(ui->checkBox_update->isCheckable())
+        {
+            ui->checkBox_update_src->setEnabled(true);
+            ui->comboBox_update_src->setEnabled(true);
+            if (!forceSource.isEmpty())
+            {
+                ui->checkBox_update_src->setChecked(true);
+            }
+            else
+            {
+                ui->checkBox_update_src->setChecked(false);
+            }
+            ui->comboBox_update_src->setCurrentText(sourceUpdate);
+        }
+        else
+        {
+            ui->checkBox_update_src->setEnabled(false);
+            ui->comboBox_update_src->setEnabled(false);
+        }
     }
 }
 
@@ -183,7 +206,16 @@ void OtherWidget::quitUi()
     }
     if(ui->checkBox_update->isChecked() && support_openssl == true)
     {
-        setting.setValue("autoUpdate", "Support");
+        setting.setValue("autoUpdate", "true");
+        if (ui->checkBox_update_src->isChecked())
+        {
+            setting.setValue("forceSource", "true");
+            setting.setValue("sourceUpdate", ui->comboBox_update_src->currentText());
+        }
+        else
+        {
+            setting.setValue("forceSource", "");
+        }
     }
     else
     {
@@ -247,3 +279,17 @@ void OtherWidget::on_checkBox_add_stateChanged(int arg1)
     }
 }
 
+
+void OtherWidget::on_checkBox_update_stateChanged(int arg1)
+{
+    if(arg1 == 0)
+    {
+        ui->checkBox_update_src->setEnabled(false);
+        ui->comboBox_update_src->setEnabled(false);
+    }
+    else
+    {
+        ui->checkBox_update_src->setEnabled(true);
+        ui->comboBox_update_src->setEnabled(true);
+    }
+}

@@ -180,14 +180,35 @@
       <string>系统配置</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_8">
-      <item row="0" column="0">
-       <widget class="QCheckBox" name="checkBox_update">
+      <item row="1" column="0">
+       <widget class="QCheckBox" name="checkBox_update_src">
         <property name="text">
-         <string>启动自动检测更新</string>
+         <string>强制更新源</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
+      <item row="1" column="1">
+       <widget class="QComboBox" name="comboBox_update_src">
+        <item>
+         <property name="text">
+          <string>Github</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Gitee</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="0" column="0" colspan="2">
+       <widget class="QCheckBox" name="checkBox_update">
+        <property name="text">
+         <string>开启更新检测</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0" colspan="2">
        <spacer name="verticalSpacer_2">
         <property name="orientation">
          <enum>Qt::Vertical</enum>

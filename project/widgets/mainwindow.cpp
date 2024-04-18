@@ -34,6 +34,21 @@ MainWindow::MainWindow(QWidget *parent)
         {
             update_url = GITEE_URL;
         }
+
+        /* Forced update source */
+        qDebug() << setting.value("forceSource").toString() << setting.value("sourceUpdate").toString();
+        if (!setting.value("forceSource").toString().isEmpty())
+        {
+            if (setting.value("sourceUpdate").toString() == "Gitee")
+            {
+                update_url = GITEE_URL;
+            }
+            else
+            {
+                update_url = GITHUB_URL;
+            }
+        }
+
         qDebug() << "Url is :" << update_url;
         /* Config for updates */
         updater->setModuleVersion(update_url, get_version_string());

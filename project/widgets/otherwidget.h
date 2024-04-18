@@ -42,6 +42,8 @@ private slots:
 
     void on_checkBox_add_stateChanged(int arg1);
 
+    void on_checkBox_update_stateChanged(int arg1);
+
 private:
     Ui::OtherWidget *ui;
     RTduinoConfig *rtduino;
