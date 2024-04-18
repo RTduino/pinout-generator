@@ -1,3 +1,5 @@
 *.pro.user
 build*/
 *.ini
+*.zip
+qt-mingw*/
