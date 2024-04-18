@@ -1,0 +1,199 @@
+{
+    "series": "RENESAS",
+    "date": "2023-12-02",
+    "author": "liYony",
+    "childseries":[
+        "RA2",
+        "RA4",
+        "RA6",
+        "RA8"
+    ],
+    "pininfo": {
+        "format": "BSP_IO_PORT_(port)_PIN_(pin)",
+        "ports": [
+            "00",
+            "01",
+            "02",
+            "03",
+            "04",
+            "05",
+            "06",
+            "07",
+            "08",
+            "09",
+            "10",
+            "11",
+            "12",
+            "13",
+            "14"
+        ],
+        "pins": [
+            "00",
+            "01",
+            "02",
+            "03",
+            "04",
+            "05",
+            "06",
+            "07",
+            "08",
+            "09",
+            "10",
+            "11",
+            "12",
+            "13",
+            "14",
+            "15"
+        ]
+    },
+    "timers":[
+        "timer1",
+        "timer2"
+    ],
+    "iofunctions": [
+        {
+            "function": "GPIO",
+            "help": "this is help.",
+            "support": true,
+            "ioremaps": [],
+            "names": [],
+            "channels": []
+        },
+        {
+            "function": "UART",
+            "help": "this is help.",
+            "support": true,
+            "ioremaps": [
+                "TX",
+                "RX"
+            ],
+            "names": [
+                "uart0",
+                "uart1",
+                "uart2",
+                "uart3",
+                "uart4",
+                "uart5",
+                "uart6",
+                "uart7",
+                "uart8",
+                "uart9"
+            ],
+            "channels": []
+        },
+        {
+            "function": "PWM",
+            "help": "this is help.",
+            "support": true,
+            "ioremaps": [],
+            "names": [
+                "pwm0",
+                "pwm1",
+                "pwm2",
+                "pwm3",
+                "pwm4",
+                "pwm5",
+                "pwm6",
+                "pwm7",
+                "pwm8",
+                "pwm9"
+            ],
+            "channels": [
+                "0"
+            ]
+        },
+        {
+            "function": "ADC",
+            "help": "this is help.",
+            "support": true,
+            "ioremaps": [],
+            "names": [
+                "adc0",
+                "adc1"
+            ],
+            "channels": [
+                "0",
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "10",
+                "11",
+                "12",
+                "13",
+                "14",
+                "15",
+                "16",
+                "17",
+                "18",
+                "19",
+                "20",
+                "21",
+                "22",
+                "23",
+                "24",
+                "25",
+                "26",
+                "27",
+                "28",
+                "VREFINT",
+                "TEMPSENSOR"
+            ]
+        },
+        {
+            "function": "DAC",
+            "help": "this is help.",
+            "support": true,
+            "ioremaps": [],
+            "names": [
+                "dac0",
+                "dac1"
+            ],
+            "channels": [
+                "0"
+            ]
+        },
+        {
+            "function": "SPI",
+            "help": "this is help.",
+            "support": true,
+            "ioremaps": [
+                "MISO",
+                "MOSI",
+                "SCK"
+            ],
+            "names": [
+                "spi0",
+                "spi1"
+            ],
+            "channels": []
+        },
+        {
+            "function": "I2C",
+            "help": "this is help.",
+            "support": true,
+            "ioremaps": [
+                "SCL",
+                "SDA"
+            ],
+            "names": [
+                "i2c0",
+                "i2c1"
+            ],
+            "channels": []
+        },
+        {
+            "function": "USB",
+            "help": "this is help.",
+            "support": false,
+            "ioremaps": [],
+            "names": [],
+            "channels": []
+        }
+    ]
+}

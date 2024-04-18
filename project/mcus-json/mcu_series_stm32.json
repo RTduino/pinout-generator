@@ -1,0 +1,241 @@
+{
+    "series": "STM32",
+    "date": "2023-12-02",
+    "author": "liYony",
+    "childseries":[
+        "STM32F0",
+        "STM32F1",
+        "STM32F2",
+        "STM32F3",
+        "STM32F4",
+        "STM32F7",
+        "STM32G0",
+        "STM32G4",
+        "STM32H7",
+        "STM32L0",
+        "STM32L1",
+        "STM32L4",
+        "STM32L5"
+    ],
+    "pininfo": {
+        "format": "GET_PIN((port), (pin))",
+        "ports": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H",
+            "I",
+            "J",
+            "K",
+            "Z"
+        ],
+        "pins": [
+            "0",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "11",
+            "12",
+            "13",
+            "14",
+            "15"
+        ]
+    },
+    "timers":[
+        "timer1",
+        "timer2",
+        "timer3",
+        "timer4",
+        "timer5",
+        "timer6",
+        "timer7",
+        "timer8",
+        "timer9",
+        "timer10",
+        "timer11",
+        "timer12",
+        "timer13",
+        "timer14",
+        "timer15",
+        "timer16",
+        "timer17"
+    ],
+    "iofunctions": [
+        {
+            "function": "GPIO",
+            "help": "this is help.",
+            "support": true,
+            "ioremaps": [],
+            "names": [],
+            "channels": []
+        },
+        {
+            "function": "UART",
+            "help": "this is help.",
+            "support": true,
+            "ioremaps": [
+                "TX",
+                "RX"
+            ],
+            "names": [
+                "uart1",
+                "uart2",
+                "uart3",
+                "uart4",
+                "uart5",
+                "uart6",
+                "uart7",
+                "uart8",
+                "lpuart1"
+            ],
+            "channels": []
+        },
+        {
+            "function": "PWM",
+            "help": "this is help.",
+            "support": true,
+            "ioremaps": [],
+            "names": [
+                "pwm1",
+                "pwm2",
+                "pwm3",
+                "pwm4",
+                "pwm5",
+                "pwm6",
+                "pwm7",
+                "pwm8",
+                "pwm9",
+                "pwm10",
+                "pwm11",
+                "pwm12",
+                "pwm13",
+                "pwm14",
+                "pwm15",
+                "pwm16",
+                "pwm17",
+                "pwm18"
+            ],
+            "channels": [
+                "-4",
+                "-3",
+                "-2",
+                "-1",
+                "1",
+                "2",
+                "3",
+                "4"
+            ]
+        },
+        {
+            "function": "ADC",
+            "help": "this is help.",
+            "support": true,
+            "ioremaps": [],
+            "names": [
+                "adc1",
+                "adc2",
+                "adc3"
+            ],
+            "channels": [
+                "0",
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "10",
+                "11",
+                "12",
+                "13",
+                "14",
+                "15",
+                "16",
+                "17",
+                "18",
+                "19",
+                "VREFINT",
+                "VBAT",
+                "TEMPSENSOR"
+            ]
+        },
+        {
+            "function": "DAC",
+            "help": "this is help.",
+            "support": true,
+            "ioremaps": [],
+            "names": [
+                "dac1",
+                "dac2"
+            ],
+            "channels": [
+                "1",
+                "2"
+            ]
+        },
+        {
+            "function": "SPI",
+            "help": "this is help.",
+            "support": true,
+            "ioremaps": [
+                "MISO",
+                "MOSI",
+                "SCK"
+            ],
+            "names": [
+                "spi1",
+                "spi2",
+                "spi3",
+                "spi4",
+                "spi5",
+                "spi6"
+            ],
+            "channels": []
+        },
+        {
+            "function": "I2C",
+            "help": "this is help.",
+            "support": true,
+            "ioremaps": [
+                "SCL",
+                "SDA"
+            ],
+            "names": [
+                "i2c1",
+                "i2c2",
+                "i2c3",
+                "i2c4"
+            ],
+            "channels": []
+        },
+        {
+            "function": "USB",
+            "help": "this is help.",
+            "support": true,
+            "ioremaps": [
+                "DP",
+                "DM"
+            ],
+            "names": [
+                "usb",
+                "usbd",
+                "usbh"
+            ],
+            "channels": []
+        }
+    ]
+}
