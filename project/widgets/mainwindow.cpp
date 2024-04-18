@@ -6,6 +6,9 @@
 #include <QSslSocket>
 #include <QDesktopServices>
 #include <version.h>
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -17,7 +20,7 @@ MainWindow::MainWindow(QWidget *parent)
     QSettings setting(qApp->applicationDirPath() +"/Setting.ini", QSettings::IniFormat);
     rtduino->setAutoCheckUpdate(!setting.value("autoUpdate").toString().isEmpty());
 
-    qDebug()<<"QSslSocket:"<<QSslSocket::sslLibraryBuildVersionString();
+    qDebug() << "QSslSocket:" <<QSslSocket::sslLibraryBuildVersionString();
     qDebug() << "OpenSSL support:" << QSslSocket::supportsSsl();
     qDebug() << "Auto Update:" << rtduino->getAutoCheckUpdate();
 
@@ -26,16 +29,22 @@ MainWindow::MainWindow(QWidget *parent)
         /* QSimpleUpdater is single-instance */
         updater = QSimpleUpdater::getInstance();
 
+        QString update_url = GITHUB_URL;
+        if (getCountry().toUpper() == "CHINA")
+        {
+            update_url = GITEE_URL;
+        }
+        qDebug() << "Url is :" << update_url;
         /* Config for updates */
-        updater->setModuleVersion(DEFS_URL, get_version_string());
-        updater->setNotifyOnFinish(DEFS_URL, false);
-        updater->setNotifyOnUpdate(DEFS_URL, true);
-        updater->setUseCustomAppcast(DEFS_URL, false);
-        updater->setDownloaderEnabled(DEFS_URL, true);
-        updater->setMandatoryUpdate(DEFS_URL, false);
+        updater->setModuleVersion(update_url, get_version_string());
+        updater->setNotifyOnFinish(update_url, false);
+        updater->setNotifyOnUpdate(update_url, true);
+        updater->setUseCustomAppcast(update_url, false);
+        updater->setDownloaderEnabled(update_url, true);
+        updater->setMandatoryUpdate(update_url, false);
 
         /* Check for updates */
-        updater->checkForUpdates(DEFS_URL);
+        updater->checkForUpdates(update_url);
     }
     cfile = new CreateFile;
 }
@@ -76,6 +85,30 @@ void MainWindow::initStackedWidget()
         ui->label_proname->setText(rtduino->getProjectInfo()->project_name + ".rdpg");
     else
         ui->label_proname->setText("");
+}
+
+QString MainWindow::getCountry()
+{
+    QNetworkAccessManager* manager = new QNetworkAccessManager();
+    QNetworkRequest request(QUrl("http://www.ip-api.com/json"));
+    QNetworkReply* reply = manager->get(request);
+    QString country = "Canada";
+
+    QEventLoop loop;
+    connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+    loop.exec();
+
+    if (reply != nullptr && reply->error() == QNetworkReply::NoError)
+    {
+        QString jsonString = reply->readAll();
+        QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonString.toUtf8());
+        QJsonObject jsonObject = jsonDoc.object();
+        country = jsonObject["country"].toString();
+    }
+
+    qDebug() << "The current country is:" << country;
+
+    return country;
 }
 
 void MainWindow::dealWidget()

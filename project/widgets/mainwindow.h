@@ -22,6 +22,7 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     void initStackedWidget();
+    QString getCountry();
 private slots:
     void dealWidget();
     void updateProjectInfo();

@@ -1,0 +1,12 @@
+{
+  "updates": {
+    "windows": {
+      "open-url": "",
+      "type-version": "Beta",
+      "latest-version": "2.0.4",
+      "download-url": "https://gitee.com/rtduino/pinout-generator/raw/master/software/pinout-generator-v2.0.3-setup.exe",
+      "changelog": "This is an example changelog for Windows. Go on...",
+      "mandatory-update": false
+    }
+  }
+}
