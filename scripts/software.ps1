@@ -1,5 +1,6 @@
 param (
-    [switch]$repack # A switch parameter to indicate whether to repack the application
+    [switch]$repack, # A switch parameter to indicate whether to repack the application
+    [String]$exefile
 )
 
 # Save the current directory to the location stack
@@ -15,6 +16,14 @@ $nsis_script_file = Join-Path $PSScriptRoot "..\tools\nsis\setup.nsi"
 
 # Define the path to the executable file to be copied
 $exe_file_path = Join-Path $PSScriptRoot "..\build\release\pinout-generator.exe"
+
+if ($exefile) {  
+    if (-not (Test-Path -Path $exefile -PathType Leaf)) {
+        Write-Error "The specified executable path $exefile does not exist."  
+        exit 1
+    }
+    $exe_file_path = $exefile
+}  
 
 # If the repack switch is specified, clear the target directory and recreate it
 if ($repack) {
@@ -41,9 +50,31 @@ if (Test-Path $exe_file_path) {
     }
 }
 
+# Get the directories from the PATH environment variable for the machine
+$envpath_folders = [Environment]::GetEnvironmentVariable("PATH", "Machine") -split ';' | Where-Object { $_ -ne "" }
+
 # If the repack switch is specified, run windeployqt to deploy dependencies
 if ($repack) {
-    & $PSScriptRoot\mingwqt.ps1 envpath
+    if ($exefile) {
+        # Check each directory to see if it contains windeployqt.exe
+        $windeployqt_found = $false
+        foreach ($folder in $envpath_folders) {
+            $windeployqt_path = Join-Path -Path $folder -ChildPath "windeployqt.exe"
+            if (Test-Path -Path $windeployqt_path -PathType Leaf) {
+                $windeployqt_found = $true
+                Write-Host "windeployqt.exe found at path: $windeployqt_path"
+                break # Exit the loop once windeployqt.exe is found
+            }
+        }
+
+        # If windeployqt.exe is not found
+        if (-not $windeployqt_found) {
+            Write-Error "windeployqt.exe could not be found. Please ensure it is installed correctly and its path is added to the system's PATH environment variable."
+            exit 1 # Exit the script with an error code
+        }
+    } else {
+        & $PSScriptRoot\mingwqt.ps1 -envpath
+    }
 
     # Change the current directory to the Windows software subdirectory
     Set-Location -Path $win_software_path
@@ -54,6 +85,8 @@ if ($repack) {
     $lastExitCode = $LASTEXITCODE
     if ($lastExitCode -ne 0) {
         Write-Error "windeployqt execution failed with exit code $lastExitCode"
+        Pop-Location
+        exit 1 # Exit the script with an error code
     } else {
         Write-Host "windeployqt execution successful"
     }
@@ -67,9 +100,6 @@ if ($repack) {
     # third-dll
     Get-ChildItem -Path $third_dll_path -File | Copy-Item -Destination $win_software_path -Force
 }
-
-# Get the directories from the PATH environment variable for the machine
-$envpath_folders = [Environment]::GetEnvironmentVariable("PATH", "Machine") -split ';' | Where-Object { $_ -ne "" }
 
 # Check each directory to see if it contains makensis.exe
 $makensis_found = $false
@@ -85,6 +115,7 @@ foreach ($folder in $envpath_folders) {
 # If makensis.exe is not found
 if (-not $makensis_found) {
     Write-Error "makensis.exe could not be found. Please ensure it is installed correctly and its path is added to the system's PATH environment variable."
+    Pop-Location
     exit 1 # Exit the script with an error code
 } else {
     # Execute makensis.exe with the provided script file
@@ -94,6 +125,8 @@ if (-not $makensis_found) {
     $lastExitCode = $LASTEXITCODE
     if ($lastExitCode -ne 0) {
         Write-Error "makensis execution failed with exit code $lastExitCode"
+        Pop-Location
+        exit 1 # Exit the script with an error code
     } else {
         Write-Host "makensis execution successful"
     }
