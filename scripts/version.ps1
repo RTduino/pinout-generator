@@ -1,6 +1,9 @@
 param (
     [Parameter(Mandatory = $true)]
-    [string]$version
+    [string]$version,
+    [Parameter(Mandatory=$false)]
+    [ValidateSet("Release", "Alpha", "Beta")]
+    [String]$type
 )
 
 # Check if the version format is correct
@@ -25,6 +28,7 @@ $major, $minor, $patch = $version.Split('.')
 $majorPattern = '#define PG_VERSION_MAJOR\s+(\d+)\s+.*'
 $minorPattern = '#define PG_VERSION_MINOR\s+(\d+)\s+.*'
 $patchPattern = '#define PG_VERSION_PATCH\s+(\d+)\s+.*'
+$typePattern  = '#define PG_VERSION_TYPE\s+"(Release|Alpha|Beta)"\s+.*'
 
 # Replace the major version number, ensuring proper tab indentation
 $fileContent = $fileContent -replace $majorPattern, "#define PG_VERSION_MAJOR                $major               /**< Major version number (X.x.x) */"
@@ -34,6 +38,11 @@ $fileContent = $fileContent -replace $minorPattern, "#define PG_VERSION_MINOR   
 
 # Replace the patch version number, ensuring proper tab indentation
 $fileContent = $fileContent -replace $patchPattern, "#define PG_VERSION_PATCH                $patch               /**< Patch version number (x.x.X) */"
+
+if ($type) {
+    # Replace the version type, ensuring proper tab indentation
+    $fileContent = $fileContent -replace $typePattern, "#define PG_VERSION_TYPE                 `"$type`"       /**< [Alpha] [Beta] [Release] >*/"
+}
 
 # Use the .NET File class to save the file
 [System.IO.File]::WriteAllText($filePath, $fileContent)
