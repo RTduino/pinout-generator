@@ -58,8 +58,9 @@ $fileContent = Get-Content -Raw -Path $filePath
 
 # Use regular expression to find and replace the version number
 $fileContent = $fileContent -replace ('("latest-version":\s*")(\d+(\.\d+)+)(")', ('"latest-version": "' + $version + '"'))
-$fileContent = $fileContent -replace ('"type-version":\s*("Release"|"Alpha"|"Beta"),', ('"type-version": "' + $type + '",'))
-
+if ($type) {
+    $fileContent = $fileContent -replace ('"type-version":\s*("Release"|"Alpha"|"Beta"),', ('"type-version": "' + $type + '",'))
+}
 # If needed, update the version number in the download URL (assuming it's the same as latest-version)
 $baseUrl = "https://gitee.com/rtduino/pinout-generator/raw/master/software/pinout-generator-v"
 $oldDownloadUrlPattern = $baseUrl + '(\d+(\.\d+)+)-setup.exe'
@@ -80,8 +81,9 @@ $fileContent = Get-Content -Raw -Path $filePath
 
 # Use regular expressions to find and replace the version number in the file content.
 $fileContent = $fileContent -replace ('("latest-version":\s*")(\d+(\.\d+)+)(")', ('"latest-version": "' + $version + '"'))
-$fileContent = $fileContent -replace ('"type-version":\s*("Release"|"Alpha"|"Beta"),', ('"type-version": "' + $type + '",'))
-
+if ($type) {
+    $fileContent = $fileContent -replace ('"type-version":\s*("Release"|"Alpha"|"Beta"),', ('"type-version": "' + $type + '",'))
+}
 # If the version number in the download link also needs to be updated, do so here.
 $baseUrl = "https://raw.githubusercontent.com/RTduino/pinout-generator/master/software/pinout-generator-v"
 $oldDownloadUrlPattern = $baseUrl + '(\d+(\.\d+)+)-setup.exe'
