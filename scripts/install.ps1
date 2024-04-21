@@ -1,5 +1,5 @@
 # Define the URL for downloading the compressed file
-$download_url = "https://github.com/liYony/qt-mingw-tool/releases/download/v1.0.0/qt-mingw.zip"
+$download_url = "https://github.com/RTduino/qt-mingw-tool/releases/download/v1.0.0/qt-mingw.zip"
 # Define the path where the compressed file will be downloaded
 $download_path = Join-Path $PSScriptRoot "..\tools\qt-mingw.zip"
 # Define the path where the extracted files will be placed
